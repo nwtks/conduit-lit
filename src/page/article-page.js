@@ -8,6 +8,7 @@ import "../component/footer";
 import "../component/article-meta";
 import "../component/tag-list";
 import { fetchGet, fetchPost, fetchDelete } from "../fetch";
+import { formatDate } from "../format";
 import { no_image } from "../config";
 
 export class ArticlePage extends LitElement {
@@ -176,7 +177,7 @@ export class ArticlePage extends LitElement {
                             />&#160;${item.author.username}
                           </a>
                           <span class="date-posted"
-                            >${item.createdAt || ""}</span
+                            >${formatDate(item.createdAt)}</span
                           >
                           ${when(
                             this.auth &&

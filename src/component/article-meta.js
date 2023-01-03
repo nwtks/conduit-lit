@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit";
 import { when } from "lit/directives/when.js";
 import { fetchPost, fetchDelete } from "../fetch";
+import { formatDate } from "../format";
 import { no_image } from "../config";
 
 export class ArticleMeta extends LitElement {
@@ -86,7 +87,7 @@ export class ArticleMeta extends LitElement {
           <a class="author" href="#/profile/${this.article.author.username}">
             ${this.article.author.username}
           </a>
-          <span class="date">${this.article.createdAt || ""}</span>
+          <span class="date">${formatDate(this.article.createdAt)}</span>
         </div>
         ${when(
           this.actions,
