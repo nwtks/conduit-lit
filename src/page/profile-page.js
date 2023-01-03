@@ -1,10 +1,9 @@
 import { LitElement, html } from "lit";
-import { map } from "lit/directives/map.js";
 import { when } from "lit/directives/when.js";
-import { range } from "lit/directives/range.js";
 import "../component/navbar";
 import "../component/footer";
 import "../component/article-previews";
+import "../component/pagination";
 import { fetchGet, fetchPost, fetchDelete } from "../fetch";
 import { no_image } from "../config";
 
@@ -192,29 +191,12 @@ export class ProfilePage extends LitElement {
                 .auth=${this.auth}
                 .articles=${this.articles}
               ></c-article-previews>
-              <nav>
-                <ul class="pagination">
-                  ${map(
-                    range(this.articlesCount / 5),
-                    (i) => html`
-                      <li
-                        class="page-item ${this.offset === i ? "active" : ""}"
-                      >
-                        <a
-                          class="page-link"
-                          href=""
-                          @click="${(e) => {
-                            e.preventDefault();
-                            this.fetchPage(i);
-                          }}"
-                        >
-                          ${i + 1}
-                        </a>
-                      </li>
-                    `
-                  )}
-                </ul>
-              </nav>
+              <c-pagination
+                per="5"
+                .offset=${this.offset}
+                .total=${this.articlesCount}
+                @paging="${(e) => this.fetchPage(e.detail.offset)}"
+              ></c-pagination>
             </div>
           </div>
         </div>
