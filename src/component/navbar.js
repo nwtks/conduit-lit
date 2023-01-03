@@ -1,6 +1,9 @@
-import { LitElement, html } from "lit";
-import { when } from "lit/directives/when.js";
-import { no_image } from "../config";
+import {
+  LitElement,
+  html,
+  when,
+} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { no_image } from "../config.js";
 
 export class Navbar extends LitElement {
   static properties = {

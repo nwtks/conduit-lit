@@ -1,15 +1,18 @@
-import { LitElement, html } from "lit";
-import { map } from "lit/directives/map.js";
-import { when } from "lit/directives/when.js";
-import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import { marked } from "marked";
-import "../component/navbar";
-import "../component/footer";
-import "../component/article-meta";
-import "../component/tag-list";
-import { fetchGet, fetchPost, fetchDelete } from "../fetch";
-import { formatDate } from "../format";
-import { no_image } from "../config";
+import {
+  LitElement,
+  html,
+  map,
+  when,
+  unsafeHTML,
+} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+import "../component/navbar.js";
+import "../component/footer.js";
+import "../component/article-meta.js";
+import "../component/tag-list.js";
+import { fetchGet, fetchPost, fetchDelete } from "../fetch.js";
+import { formatDate } from "../format.js";
+import { no_image } from "../config.js";
 
 export class ArticlePage extends LitElement {
   static properties = {

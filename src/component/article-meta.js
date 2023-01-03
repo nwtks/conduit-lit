@@ -1,8 +1,11 @@
-import { LitElement, html } from "lit";
-import { when } from "lit/directives/when.js";
-import { fetchPost, fetchDelete } from "../fetch";
-import { formatDate } from "../format";
-import { no_image } from "../config";
+import {
+  LitElement,
+  html,
+  when,
+} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { fetchPost, fetchDelete } from "../fetch.js";
+import { formatDate } from "../format.js";
+import { no_image } from "../config.js";
 
 export class ArticleMeta extends LitElement {
   static properties = {

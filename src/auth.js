@@ -1,4 +1,4 @@
-import { server_url } from "./config";
+import { server_url } from "./config.js";
 
 const KEY = "conduit-auth";
 

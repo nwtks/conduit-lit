@@ -1,7 +1,10 @@
-import { LitElement, html } from "lit";
-import { map } from "lit/directives/map.js";
-import "./article-meta";
-import "./tag-list";
+import {
+  LitElement,
+  html,
+  map,
+} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import "./article-meta.js";
+import "./tag-list.js";
 
 export class ArticlePreviews extends LitElement {
   static properties = {

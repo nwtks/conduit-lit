@@ -1,5 +1,8 @@
-import { LitElement, html } from "lit";
-import { map } from "lit/directives/map.js";
+import {
+  LitElement,
+  html,
+  map,
+} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 
 export class TagList extends LitElement {
   static properties = {

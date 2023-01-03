@@ -3,16 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "dist/conduit-lit.js",
   "files": [
     "dist"
   ],
   "scripts": {
     "dev": "vite",
     "build": "vite build"
-  },
-  "dependencies": {
-    "lit": "^2.5.0",
-    "marked": "^4.2.5"
   },
   "devDependencies": {
     "rollup-plugin-minify-html-literals": "^1.2.6",

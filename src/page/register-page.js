@@ -1,9 +1,12 @@
-import { LitElement, html } from "lit";
-import { map } from "lit/directives/map.js";
-import "../component/navbar";
-import "../component/footer";
-import { fetchPost } from "../fetch";
-import { setAuth } from "../auth";
+import {
+  LitElement,
+  html,
+  map,
+} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import "../component/navbar.js";
+import "../component/footer.js";
+import { fetchPost } from "../fetch.js";
+import { setAuth } from "../auth.js";
 
 export class RegisterPage extends LitElement {
   static properties = {

@@ -1,11 +1,14 @@
-import { LitElement, html } from "lit";
-import { map } from "lit/directives/map.js";
-import { when } from "lit/directives/when.js";
-import "../component/navbar";
-import "../component/footer";
-import "../component/article-previews";
-import "../component/pagination";
-import { fetchGet } from "../fetch";
+import {
+  LitElement,
+  html,
+  map,
+  when,
+} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import "../component/navbar.js";
+import "../component/footer.js";
+import "../component/article-previews.js";
+import "../component/pagination.js";
+import { fetchGet } from "../fetch.js";
 
 export class HomePage extends LitElement {
   static properties = {

@@ -1,8 +1,11 @@
-import { LitElement, html } from "lit";
-import { map } from "lit/directives/map.js";
-import "../component/navbar";
-import "../component/footer";
-import { authenticate } from "../auth";
+import {
+  LitElement,
+  html,
+  map,
+} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import "../component/navbar.js";
+import "../component/footer.js";
+import { authenticate } from "../auth.js";
 
 export class LoginPage extends LitElement {
   static properties = {

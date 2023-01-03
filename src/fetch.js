@@ -1,5 +1,5 @@
-import { server_url } from "./config";
-import { getAuth } from "./auth";
+import { server_url } from "./config.js";
+import { getAuth } from "./auth.js";
 
 const fetchWithHeaders = (reqAuth, fetch) => {
   const headers = {

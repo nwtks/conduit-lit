@@ -1,4 +1,7 @@
-import { LitElement, html } from "lit";
+import {
+  LitElement,
+  html,
+} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 
 export class Footer extends LitElement {
   createRenderRoot() {

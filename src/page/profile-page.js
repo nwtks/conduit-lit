@@ -1,11 +1,14 @@
-import { LitElement, html } from "lit";
-import { when } from "lit/directives/when.js";
-import "../component/navbar";
-import "../component/footer";
-import "../component/article-previews";
-import "../component/pagination";
-import { fetchGet, fetchPost, fetchDelete } from "../fetch";
-import { no_image } from "../config";
+import {
+  LitElement,
+  html,
+  when,
+} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import "../component/navbar.js";
+import "../component/footer.js";
+import "../component/article-previews.js";
+import "../component/pagination.js";
+import { fetchGet, fetchPost, fetchDelete } from "../fetch.js";
+import { no_image } from "../config.js";
 
 export class ProfilePage extends LitElement {
   static properties = {
