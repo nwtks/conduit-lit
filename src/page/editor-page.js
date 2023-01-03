@@ -140,7 +140,7 @@ export class EditorPage extends LitElement {
                       type="text"
                       placeholder="Enter tags"
                       .value=${this.tag || ""}
-                      @keyup=${this.addTag}
+                      @keydown=${this.addTag}
                     />
                     <div class="tag-list">
                       ${map(
