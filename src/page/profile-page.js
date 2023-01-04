@@ -1,7 +1,6 @@
 import {
   LitElement,
   html,
-  when,
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 import "../component/navbar.js";
 import "../component/footer.js";
@@ -15,9 +14,9 @@ export class ProfilePage extends LitElement {
     auth: { type: Object },
     username: { type: String },
     profile: { type: Object },
-    article: { type: String },
     articles: { type: Array },
     articlesCount: { type: Number },
+    article: { type: String },
     offset: { type: Number },
   };
 
@@ -83,8 +82,7 @@ export class ProfilePage extends LitElement {
     );
   }
 
-  toggleFollow(e) {
-    e.preventDefault();
+  toggleFollow() {
     if (this.auth) {
       if (this.profile.following) {
         fetchDelete(
@@ -107,53 +105,16 @@ export class ProfilePage extends LitElement {
     }
   }
 
+  renderActive(article) {
+    return this.article === article ? "active" : "";
+  }
+
   render() {
     return html`
       <c-navbar .auth=${this.auth} path="profile"></c-navbar>
       <div class="profile-page">
         <div class="user-info">
-          <div class="container">
-            ${when(
-              this.profile,
-              () => html`
-                <div class="row">
-                  <div class="col-xs-12 col-md-10 offset-md-1">
-                    <img
-                      class="user-img"
-                      src=${this.profile.image || no_image}
-                    />
-                    <h4>${this.profile.username}</h4>
-                    <p>${this.profile.bio || ""}</p>
-                    ${when(
-                      this.auth && this.profile.username === this.auth.username,
-                      () => html`
-                        <a
-                          class="btn btn-sm btn-outline-secondary action-btn"
-                          href="#/settings"
-                        >
-                          <i class="ion-gear-a"></i>&#160;Edit profile settings
-                        </a>
-                      `,
-                      () => html`
-                        <button
-                          class="btn btn-sm action-btn ${this.profile.following
-                            ? "btn-secondary"
-                            : "btn-outline-secondary"}"
-                          @click=${this.toggleFollow}
-                        >
-                          <i class="ion-plus-round"></i>&#160;${this.profile
-                            .following
-                            ? "Unfollow"
-                            : "Follow"}
-                          ${this.profile.username}
-                        </button>
-                      `
-                    )}
-                  </div>
-                </div>
-              `
-            )}
-          </div>
+          <div class="container">${this.renderProfile()}</div>
         </div>
         <div class="container">
           <div class="row">
@@ -162,28 +123,24 @@ export class ProfilePage extends LitElement {
                 <ul class="nav nav-pills outline-active">
                   <li class="nav-item">
                     <a
-                      class="nav-link ${this.article === "author"
-                        ? "active"
-                        : ""}"
+                      class="nav-link ${this.renderActive("author")}"
                       href=""
-                      @click="${(e) => {
+                      @click=${(e) => {
                         e.preventDefault();
                         this.fetchMyArticles();
-                      }}"
+                      }}
                     >
                       My articles
                     </a>
                   </li>
                   <li class="nav-item">
                     <a
-                      class="nav-link ${this.article === "favorited"
-                        ? "active"
-                        : ""}"
+                      class="nav-link ${this.renderActive("favorited")}"
                       href=""
-                      @click="${(e) => {
+                      @click=${(e) => {
                         e.preventDefault();
                         this.fetchFavoritedArticles();
-                      }}"
+                      }}
                     >
                       Favorited articles
                     </a>
@@ -198,13 +155,58 @@ export class ProfilePage extends LitElement {
                 per="5"
                 .offset=${this.offset}
                 .total=${this.articlesCount}
-                @paging="${(e) => this.fetchPage(e.detail.offset)}"
+                @paging=${(e) => this.fetchPage(e.detail.offset)}
               ></c-pagination>
             </div>
           </div>
         </div>
       </div>
       <c-footer></c-footer>
+    `;
+  }
+
+  renderProfile() {
+    if (!this.profile) {
+      return html`<p>Loading profile...</p>`;
+    }
+    return html`
+      <div class="row">
+        <div class="col-xs-12 col-md-10 offset-md-1">
+          <img class="user-img" src=${this.profile.image || no_image} />
+          <h4>${this.profile.username}</h4>
+          <p>${this.profile.bio || ""}</p>
+          ${this.renderProfileAction()}
+        </div>
+      </div>
+    `;
+  }
+
+  renderProfileAction() {
+    if (this.auth && this.profile.username === this.auth.username) {
+      return html`
+        <a
+          class="btn btn-sm btn-outline-secondary action-btn"
+          href="#/settings"
+        >
+          <i class="ion-gear-a"></i>&#160;Edit profile settings
+        </a>
+      `;
+    }
+    return html`
+      <button
+        class="btn btn-sm action-btn ${this.profile.following
+          ? "btn-secondary"
+          : "btn-outline-secondary"}"
+        @click=${(e) => {
+          e.preventDefault();
+          this.toggleFollow();
+        }}
+      >
+        <i class="ion-plus-round"></i>&#160;${this.profile.following
+          ? "Unfollow"
+          : "Follow"}
+        ${this.profile.username}
+      </button>
     `;
   }
 }

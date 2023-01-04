@@ -13,12 +13,12 @@ import { fetchGet } from "../fetch.js";
 export class HomePage extends LitElement {
   static properties = {
     auth: { type: Object },
-    feed: { type: String },
     articles: { type: Array },
     articlesCount: { type: Number },
-    offset: { type: Number },
-    tag: { type: String },
     tags: { type: Array },
+    feed: { type: String },
+    tag: { type: String },
+    offset: { type: Number },
   };
 
   createRenderRoot() {
@@ -85,6 +85,10 @@ export class HomePage extends LitElement {
     });
   }
 
+  renderActive(feed) {
+    return this.feed === feed ? "active" : "";
+  }
+
   render() {
     return html`
       <c-navbar .auth=${this.auth} path="home"></c-navbar>
@@ -105,14 +109,12 @@ export class HomePage extends LitElement {
                     () => html`
                       <li class="nav-item">
                         <a
-                          class="nav-link ${this.feed === "your"
-                            ? "active"
-                            : ""}"
+                          class="nav-link ${this.renderActive("your")}"
                           href=""
-                          @click="${(e) => {
+                          @click=${(e) => {
                             e.preventDefault();
                             this.fetchYourFeed();
-                          }}"
+                          }}
                         >
                           Your feed
                         </a>
@@ -121,12 +123,12 @@ export class HomePage extends LitElement {
                   )}
                   <li class="nav-item">
                     <a
-                      class="nav-link ${this.feed === "global" ? "active" : ""}"
+                      class="nav-link ${this.renderActive("global")}"
                       href=""
-                      @click="${(e) => {
+                      @click=${(e) => {
                         e.preventDefault();
                         this.fetchGlobalFeed();
-                      }}"
+                      }}
                     >
                       Global feed
                     </a>
@@ -138,10 +140,10 @@ export class HomePage extends LitElement {
                         <a
                           class="nav-link active"
                           href=""
-                          @click="${(e) => {
+                          @click=${(e) => {
                             e.preventDefault();
                             this.fetchTagged(this.tag);
-                          }}"
+                          }}
                         >
                           <i class="ion-pound"></i>&#160;${this.tag}
                         </a>
@@ -158,41 +160,44 @@ export class HomePage extends LitElement {
                 per="10"
                 .offset=${this.offset}
                 .total=${this.articlesCount}
-                @paging="${(e) => this.fetchPage(e.detail.offset)}"
+                @paging=${(e) => this.fetchPage(e.detail.offset)}
               ></c-pagination>
             </div>
             <div class="col-md-3">
               <div class="sidebar">
                 <p>Popular tags</p>
-                ${when(
-                  !this.tags,
-                  () => html`<p>Loading tags...</p>`,
-                  () => html`
-                    <div class="tag-list">
-                      ${map(
-                        this.tags,
-                        (item) => html`
-                          <a
-                            class="tag-pill tag-default"
-                            href=""
-                            @click="${(e) => {
-                              e.preventDefault();
-                              this.fetchTagged(item);
-                            }}"
-                          >
-                            ${item}
-                          </a>
-                        `
-                      )}
-                    </div>
-                  `
-                )}
+                ${this.renderTags()}
               </div>
             </div>
           </div>
         </div>
       </div>
       <c-footer></c-footer>
+    `;
+  }
+
+  renderTags() {
+    if (!this.tags) {
+      return html`<p>Loading tags...</p>`;
+    }
+    return html`
+      <div class="tag-list">
+        ${map(
+          this.tags,
+          (item) => html`
+            <a
+              class="tag-pill tag-default"
+              href=""
+              @click=${(e) => {
+                e.preventDefault();
+                this.fetchTagged(item);
+              }}
+            >
+              ${item}
+            </a>
+          `
+        )}
+      </div>
     `;
   }
 }

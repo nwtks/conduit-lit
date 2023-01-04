@@ -11,12 +11,12 @@ export class EditorPage extends LitElement {
   static properties = {
     auth: { type: Object },
     slug: { type: String },
-    errorMessages: { type: Array },
     title: { type: String },
     description: { type: String },
     body: { type: String },
     tag: { type: String },
     tags: { type: Array },
+    errorMessages: { type: Array },
   };
 
   createRenderRoot() {
@@ -59,10 +59,7 @@ export class EditorPage extends LitElement {
     this.tags = this.tags.filter((v) => v !== tag);
   }
 
-  submit(e) {
-    e.preventDefault();
-    this.errorMessages = [];
-
+  submit() {
     const data = {
       article: {
         title: this.title,
@@ -71,6 +68,7 @@ export class EditorPage extends LitElement {
         tagList: this.tags,
       },
     };
+    this.errorMessages = [];
     if (this.slug) {
       fetchPut(
         "articles/" + encodeURIComponent(this.slug),
@@ -152,10 +150,10 @@ export class EditorPage extends LitElement {
                           <span class="tag-default tag-pill">
                             <i
                               class="ion-close-round"
-                              @click="${(e) => {
+                              @click=${(e) => {
                                 e.preventDefault();
                                 this.removeTag(item);
-                              }}"
+                              }}
                             ></i
                             >&#160;${item}
                           </span>
@@ -165,7 +163,10 @@ export class EditorPage extends LitElement {
                   </fieldset>
                   <button
                     class="btn btn-lg pull-xs-right btn-primary"
-                    @click=${this.submit}
+                    @click=${(e) => {
+                      e.preventDefault();
+                      this.submit();
+                    }}
                   >
                     Publish article
                   </button>

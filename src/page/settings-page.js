@@ -11,12 +11,12 @@ import { setAuth, clearAuth } from "../auth.js";
 export class SettingsPage extends LitElement {
   static properties = {
     auth: { type: Object },
-    errorMessages: { type: Array },
     image: { type: String },
     username: { type: String },
     bio: { type: String },
     email: { type: String },
     password: { type: String },
+    errorMessages: { type: Array },
   };
 
   createRenderRoot() {
@@ -37,16 +37,12 @@ export class SettingsPage extends LitElement {
     });
   }
 
-  logout(e) {
-    e.preventDefault();
+  logout() {
     clearAuth();
     location.hash = "#/";
   }
 
-  submit(e) {
-    e.preventDefault();
-    this.errorMessages = [];
-
+  submit() {
     const data = {
       user: {
         image: this.image,
@@ -59,6 +55,7 @@ export class SettingsPage extends LitElement {
       data.user.password = this.password;
     }
 
+    this.errorMessages = [];
     fetchPut("user", JSON.stringify(data), true).then((r) => {
       if (r.errors) {
         this.errorMessages = Object.keys(r.errors).flatMap((k) =>
@@ -131,14 +128,23 @@ export class SettingsPage extends LitElement {
                   </fieldset>
                   <button
                     class="btn btn-lg btn-primary pull-xs-right"
-                    @click=${this.submit}
+                    @click=${(e) => {
+                      e.preventDefault();
+                      this.submit();
+                    }}
                   >
                     Update settings
                   </button>
                 </fieldset>
               </form>
               <hr />
-              <button class="btn btn-outline-danger" @click=${this.logout}>
+              <button
+                class="btn btn-outline-danger"
+                @click=${(e) => {
+                  e.preventDefault();
+                  this.logout();
+                }}
+              >
                 Or click here to logout.
               </button>
             </div>

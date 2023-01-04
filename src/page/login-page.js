@@ -9,17 +9,16 @@ import { authenticate } from "../auth.js";
 
 export class LoginPage extends LitElement {
   static properties = {
-    errorMessages: { type: Array },
     email: { type: String },
     password: { type: String },
+    errorMessages: { type: Array },
   };
 
   createRenderRoot() {
     return this;
   }
 
-  submit(e) {
-    e.preventDefault();
+  submit() {
     this.errorMessages = [];
     authenticate(this.email, this.password)
       .then((success) => {
@@ -67,7 +66,10 @@ export class LoginPage extends LitElement {
                 </fieldset>
                 <button
                   class="btn btn-lg btn-primary pull-xs-right"
-                  @click=${this.submit}
+                  @click=${(e) => {
+                    e.preventDefault();
+                    this.submit();
+                  }}
                 >
                   Sign in
                 </button>

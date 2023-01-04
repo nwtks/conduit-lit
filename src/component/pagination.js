@@ -38,10 +38,10 @@ export class Pagination extends LitElement {
                 <a
                   class="page-link"
                   href=""
-                  @click="${(e) => {
+                  @click=${(e) => {
                     e.preventDefault();
                     this.paging(i);
-                  }}"
+                  }}
                 >
                   ${i + 1}
                 </a>

@@ -50,8 +50,7 @@ export class ArticlePage extends LitElement {
     );
   }
 
-  postComment(e) {
-    e.preventDefault();
+  postComment() {
     const newComment = (this.comment || "").trim();
     if (newComment && newComment.length) {
       fetchPost(
@@ -86,128 +85,135 @@ export class ArticlePage extends LitElement {
       <c-navbar .auth=${this.auth}></c-navbar>
       <div class="article-page">
         <div class="banner">
-          <div class="container">
-            ${when(
-              this.article,
-              () => html`
-                <h1>${this.article.title || ""}</h1>
-                <c-article-meta
-                  .auth=${this.auth}
-                  .article=${this.article}
-                  actions
-                ></c-article-meta>
-              `
-            )}
-          </div>
+          <div class="container">${this.renderArticleBanner()}</div>
         </div>
         <div class="container page">
-          ${when(
-            this.article,
-            () => html`
-              <div class="row article-content">
-                <div class="col-md-12">
-                  ${unsafeHTML(marked.parse(this.article.body))}
-                  <c-tag-list .tags=${this.article.tagList}></c-tag-list>
-                </div>
-              </div>
-              <hr />
-              <div class="article-actions">
-                <c-article-meta
-                  .auth=${this.auth}
-                  .article=${this.article}
-                  actions
-                ></c-article-meta>
-              </div>
-            `
-          )}
+          ${this.renderArticle()}
           <div class="row">
             <div class="col-xs-12 col-md-8 offset-md-2">
-              ${when(
-                this.auth,
-                () => html`
-                  <form class="card comment-form">
-                    <div class="card-block">
-                      <textarea
-                        class="form-control"
-                        placeholder="Write a comment..."
-                        rows="3"
-                        .value=${this.comment || ""}
-                        @change=${(e) => (this.comment = e.target.value)}
-                      ></textarea>
-                    </div>
-                    <div class="card-footer">
-                      <img
-                        class="comment-author-img"
-                        src=${this.auth.image || no_image}
-                      />
-                      <button
-                        class="btn btn-sm btn-primary"
-                        @click=${this.postComment}
-                      >
-                        Post comment
-                      </button>
-                    </div>
-                  </form>
-                `,
-                () => html`
-                  <p>
-                    <a href="#/login">Sign in</a>
-                    or
-                    <a href="#/register">sign up</a>
-                    to add comments on this article.
-                  </p>
-                `
-              )}
-              ${when(
-                !this.comments,
-                () => html`<p>Loading comments...</p>`,
-                () =>
-                  map(
-                    this.comments,
-                    (item) => html`
-                      <div class="card">
-                        <div class="card-block">
-                          <p class="card-text">${item.body || ""}</p>
-                        </div>
-                        <div class="card-footer">
-                          <a
-                            class="comment-author"
-                            href="#/profile/${item.author.username}"
-                          >
-                            <img
-                              class="comment-author-img"
-                              src=${item.author.image || no_image}
-                            />&#160;${item.author.username}
-                          </a>
-                          <span class="date-posted"
-                            >${formatDate(item.createdAt)}</span
-                          >
-                          ${when(
-                            this.auth &&
-                              this.auth.username === item.author.username,
-                            () => html`
-                              <span class="mod-options">
-                                <i
-                                  class="ion-trash-a"
-                                  @click="${(e) => {
-                                    e.preventDefault();
-                                    this.deleteComment(item.id);
-                                  }}"
-                                ></i>
-                              </span>
-                            `
-                          )}
-                        </div>
-                      </div>
-                    `
-                  )
-              )}
+              ${this.renderCommentForm()}${this.renderComments()}
             </div>
           </div>
         </div>
       </div>
       <c-footer></c-footer>
     `;
+  }
+
+  renderArticleBanner() {
+    if (!this.article) {
+      return html`<p>Loading article...</p>`;
+    }
+    return html`
+      <h1>${this.article.title || ""}</h1>
+      <c-article-meta
+        .auth=${this.auth}
+        .article=${this.article}
+        actions
+      ></c-article-meta>
+    `;
+  }
+
+  renderArticle() {
+    if (!this.article) {
+      return;
+    }
+    return html`
+      <div class="row article-content">
+        <div class="col-md-12">
+          ${unsafeHTML(marked.parse(this.article.body))}
+          <c-tag-list .tags=${this.article.tagList}></c-tag-list>
+        </div>
+      </div>
+      <hr />
+      <div class="article-actions">
+        <c-article-meta
+          .auth=${this.auth}
+          .article=${this.article}
+          actions
+        ></c-article-meta>
+      </div>
+    `;
+  }
+
+  renderCommentForm() {
+    if (this.auth) {
+      return html`
+        <form class="card comment-form">
+          <div class="card-block">
+            <textarea
+              class="form-control"
+              placeholder="Write a comment..."
+              rows="3"
+              .value=${this.comment || ""}
+              @change=${(e) => (this.comment = e.target.value)}
+            ></textarea>
+          </div>
+          <div class="card-footer">
+            <img
+              class="comment-author-img"
+              src=${this.auth.image || no_image}
+            />
+            <button
+              class="btn btn-sm btn-primary"
+              @click=${(e) => {
+                e.preventDefault();
+                this.postComment();
+              }}
+            >
+              Post comment
+            </button>
+          </div>
+        </form>
+      `;
+    }
+    return html`
+      <p>
+        <a href="#/login">Sign in</a>
+        or
+        <a href="#/register">sign up</a>
+        to add comments on this article.
+      </p>
+    `;
+  }
+
+  renderComments() {
+    if (!this.comments) {
+      return html`<p>Loading comments...</p>`;
+    }
+    return html`${map(
+      this.comments,
+      (item) => html`
+        <div class="card">
+          <div class="card-block">
+            <p class="card-text">${item.body || ""}</p>
+          </div>
+          <div class="card-footer">
+            <a class="comment-author" href="#/profile/${item.author.username}">
+              <img
+                class="comment-author-img"
+                src=${item.author.image || no_image}
+              />&#160;${item.author.username}
+            </a>
+            <span class="date-posted">${formatDate(item.createdAt)}</span>
+            ${when(
+              this.auth && this.auth.username === item.author.username,
+              () => html`
+                <span class="mod-options">
+                  <i
+                    class="ion-trash-a"
+                    @click=${(e) => {
+                      e.preventDefault();
+                      this.deleteComment(item.id);
+                    }}
+                  ></i>
+                </span>
+              `
+            )}
+          </div>
+        </div>
+      `
+    )}`;
   }
 }
 

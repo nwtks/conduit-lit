@@ -15,6 +15,10 @@ export class Navbar extends LitElement {
     return this;
   }
 
+  renderActive(path) {
+    return this.path === path ? "active" : "";
+  }
+
   render() {
     return html`
       <nav class="navbar navbar-light">
@@ -22,10 +26,7 @@ export class Navbar extends LitElement {
           <a class="navbar-brand" href="#/">conduit</a>
           <ul class="nav navbar-nav pull-xs-right">
             <li class="nav-item">
-              <a
-                class="nav-link ${this.path === "home" ? "active" : ""}"
-                href="#/"
-              >
+              <a class="nav-link ${this.renderActive("home")}" href="#/">
                 Home
               </a>
             </li>
@@ -34,7 +35,7 @@ export class Navbar extends LitElement {
               () => html`
                 <li class="nav-item">
                   <a
-                    class="nav-link ${this.path === "editor" ? "active" : ""}"
+                    class="nav-link ${this.renderActive("editor")}"
                     href="#/editor"
                   >
                     <i class="ion-compose"></i>&#160;New article
@@ -42,7 +43,7 @@ export class Navbar extends LitElement {
                 </li>
                 <li class="nav-item">
                   <a
-                    class="nav-link ${this.path === "settings" ? "active" : ""}"
+                    class="nav-link ${this.renderActive("settings")}"
                     href="#/settings"
                   >
                     <i class="ion-gear-a"></i>&#160;Settings
@@ -50,7 +51,7 @@ export class Navbar extends LitElement {
                 </li>
                 <li class="nav-item">
                   <a
-                    class="nav-link ${this.path === "profile" ? "active" : ""}"
+                    class="nav-link ${this.renderActive("profile")}"
                     href="#/profile/${this.auth.username}"
                   >
                     <img class="user-pic" src=${this.auth.image || no_image} />
@@ -61,7 +62,7 @@ export class Navbar extends LitElement {
               () => html`
                 <li class="nav-item">
                   <a
-                    class="nav-link ${this.path === "login" ? "active" : ""}"
+                    class="nav-link ${this.renderActive("login")}"
                     href="#/login"
                   >
                     Sign in
@@ -69,7 +70,7 @@ export class Navbar extends LitElement {
                 </li>
                 <li class="nav-item">
                   <a
-                    class="nav-link ${this.path === "register" ? "active" : ""}"
+                    class="nav-link ${this.renderActive("register")}"
                     href="#/register"
                   >
                     Sign up

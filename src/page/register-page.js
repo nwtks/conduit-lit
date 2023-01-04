@@ -10,18 +10,17 @@ import { setAuth } from "../auth.js";
 
 export class RegisterPage extends LitElement {
   static properties = {
-    errorMessages: { type: Array },
     username: { type: String },
     email: { type: String },
     password: { type: String },
+    errorMessages: { type: Array },
   };
 
   createRenderRoot() {
     return this;
   }
 
-  submit(e) {
-    e.preventDefault();
+  submit() {
     this.errorMessages = [];
     fetchPost(
       "users",
@@ -88,7 +87,10 @@ export class RegisterPage extends LitElement {
                 </fieldset>
                 <button
                   class="btn btn-lg btn-primary pull-xs-right"
-                  @click=${this.submit}
+                  @click=${(e) => {
+                    e.preventDefault();
+                    this.submit();
+                  }}
                 >
                   Sign up
                 </button>
