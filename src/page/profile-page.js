@@ -1,6 +1,7 @@
 import {
   LitElement,
   html,
+  map,
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 import "../component/navbar.js";
 import "../component/footer.js";
@@ -18,6 +19,7 @@ export class ProfilePage extends LitElement {
     articlesCount: { type: Number },
     article: { type: String },
     offset: { type: Number },
+    errorMessages: { type: Array },
   };
 
   createRenderRoot() {
@@ -65,40 +67,65 @@ export class ProfilePage extends LitElement {
     }
   }
 
-  fetchArticles(params) {
+  async fetchArticles(params) {
     this.articles = null;
     this.articlesCount = 0;
-    fetchGet("articles" + params, !!this.auth).then((r) => {
-      this.articles = r.articles;
-      this.articlesCount = r.articlesCount;
-    });
+    this.errorMessages = [];
+    const res = await fetchGet("articles" + params, true);
+    if (res.articles) {
+      this.articles = res.articles;
+      this.articlesCount = res.articlesCount;
+    } else if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    }
   }
 
-  fetchProfile() {
-    fetchGet("profiles/" + encodeURIComponent(this.username), !!this.auth).then(
-      (r) => {
-        this.profile = r.profile;
-      }
+  async fetchProfile() {
+    this.errorMessages = [];
+    const res = await fetchGet(
+      "profiles/" + encodeURIComponent(this.username),
+      true
     );
+    if (res.profile) {
+      this.profile = res.profile;
+    } else if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    }
   }
 
-  toggleFollow() {
+  async toggleFollow() {
     if (this.auth) {
       if (this.profile.following) {
-        fetchDelete(
+        this.errorMessages = [];
+        const res = await fetchDelete(
           "profiles/" + encodeURIComponent(this.profile.username) + "/follow",
           true
-        ).then((r) => {
-          this.profile = r.profile;
-        });
+        );
+        if (res.profile) {
+          this.profile = res.profile;
+        } else if (res.errors) {
+          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+            res.errors[k].map((m) => k + " " + m)
+          );
+        }
       } else {
-        fetchPost(
+        this.errorMessages = [];
+        const res = await fetchPost(
           "profiles/" + encodeURIComponent(this.profile.username) + "/follow",
-          "{}",
+          {},
           true
-        ).then((r) => {
-          this.profile = r.profile;
-        });
+        );
+        if (res.profile) {
+          this.profile = res.profile;
+        } else if (res.errors) {
+          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+            res.errors[k].map((m) => k + " " + m)
+          );
+        }
       }
     } else {
       location.hash = "#/login";
@@ -117,6 +144,9 @@ export class ProfilePage extends LitElement {
           <div class="container">${this.renderProfile()}</div>
         </div>
         <div class="container">
+          <ul class="error-messages">
+            ${map(this.errorMessages, (item) => html`<li>${item}</li>`)}
+          </ul>
           <div class="row">
             <div class="col-xs-12 col-md-10 offset-md-1">
               <div class="articles-toggle">

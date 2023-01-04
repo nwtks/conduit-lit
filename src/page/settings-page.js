@@ -28,13 +28,19 @@ export class SettingsPage extends LitElement {
     this.fetchSettings();
   }
 
-  fetchSettings() {
-    fetchGet("user", true).then((r) => {
-      this.image = r.user.image || "";
-      this.username = r.user.username || "";
-      this.bio = r.user.bio || "";
-      this.email = r.user.email || "";
-    });
+  async fetchSettings() {
+    this.errorMessages = [];
+    const res = await fetchGet("user", true);
+    if (res.user) {
+      this.image = res.user.image || "";
+      this.username = res.user.username || "";
+      this.bio = res.user.bio || "";
+      this.email = res.user.email || "";
+    } else if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    }
   }
 
   logout() {
@@ -42,7 +48,7 @@ export class SettingsPage extends LitElement {
     location.hash = "#/";
   }
 
-  submit() {
+  async submit() {
     const data = {
       user: {
         image: this.image,
@@ -56,16 +62,15 @@ export class SettingsPage extends LitElement {
     }
 
     this.errorMessages = [];
-    fetchPut("user", JSON.stringify(data), true).then((r) => {
-      if (r.errors) {
-        this.errorMessages = Object.keys(r.errors).flatMap((k) =>
-          r.errors[k].map((m) => k + " " + m)
-        );
-      } else {
-        setAuth(r.user);
-        location.hash = "#/";
-      }
-    });
+    const res = await fetchPut("user", data, true);
+    if (res.user) {
+      setAuth(res.user);
+      location.hash = "#/";
+    } else if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    }
   }
 
   render() {

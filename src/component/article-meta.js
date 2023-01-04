@@ -1,6 +1,7 @@
 import {
   LitElement,
   html,
+  map,
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 import { fetchPost, fetchDelete } from "../fetch.js";
 import { formatDate } from "../format.js";
@@ -11,65 +12,96 @@ export class ArticleMeta extends LitElement {
     auth: { type: Object },
     article: { type: Object },
     actions: { type: Boolean },
+    errorMessages: { type: Array },
   };
 
   createRenderRoot() {
     return this;
   }
 
-  delete() {
-    fetchDelete("articles/" + encodeURIComponent(this.article.slug), true).then(
-      (r) => {
-        location.hash = "#/";
-      }
+  async delete() {
+    this.errorMessages = [];
+    const res = await fetchDelete(
+      "articles/" + encodeURIComponent(this.article.slug),
+      true
     );
+    if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    } else {
+      location.hash = "#/";
+    }
   }
 
-  toggleFollow() {
+  async toggleFollow() {
     if (this.auth) {
       if (this.article.author.following) {
-        fetchDelete(
+        this.errorMessages = [];
+        const res = await fetchDelete(
           "profiles/" +
             encodeURIComponent(this.article.author.username) +
             "/follow",
           true
-        ).then((r) => {
-          fetchArticle();
-        });
+        );
+        if (res.profile) {
+          this.article.author.following = res.profile.following;
+        } else if (res.errors) {
+          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+            res.errors[k].map((m) => k + " " + m)
+          );
+        }
       } else {
-        fetchPost(
+        this.errorMessages = [];
+        const res = await fetchPost(
           "profiles/" +
             encodeURIComponent(this.article.author.username) +
             "/follow",
-          "{}",
+          {},
           true
-        ).then((r) => {
-          fetchArticle();
-        });
+        );
+        if (res.profile) {
+          this.article.author.following = res.profile.following;
+        } else if (res.errors) {
+          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+            res.errors[k].map((m) => k + " " + m)
+          );
+        }
       }
     } else {
       location.hash = "#/login";
     }
   }
 
-  toggleFavorite() {
+  async toggleFavorite() {
     if (this.auth) {
       if (this.article.favorited) {
-        fetchDelete(
+        this.errorMessages = [];
+        const res = await fetchDelete(
           "articles/" + encodeURIComponent(this.article.slug) + "/favorite",
           true
-        ).then((r) => {
-          9;
-          this.article = r.article;
-        });
+        );
+        if (res.article) {
+          this.article = res.article;
+        } else if (res.errors) {
+          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+            res.errors[k].map((m) => k + " " + m)
+          );
+        }
       } else {
-        fetchPost(
+        this.errorMessages = [];
+        const res = await fetchPost(
           "articles/" + encodeURIComponent(this.article.slug) + "/favorite",
-          "{}",
+          {},
           true
-        ).then((r) => {
-          this.article = r.article;
-        });
+        );
+        if (res.article) {
+          this.article = res.article;
+        } else if (res.errors) {
+          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+            res.errors[k].map((m) => k + " " + m)
+          );
+        }
       }
     } else {
       location.hash = "#/login";
@@ -88,6 +120,9 @@ export class ArticleMeta extends LitElement {
           </a>
           <span class="date">${formatDate(this.article.createdAt)}</span>
         </div>
+        <ul class="error-messages">
+          ${map(this.errorMessages, (item) => html`<li>${item}</li>`)}
+        </ul>
         ${this.renderAction()}
       </div>
     `;

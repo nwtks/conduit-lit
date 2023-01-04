@@ -21,6 +21,7 @@ export class ArticlePage extends LitElement {
     article: { type: Object },
     comments: { type: Array },
     comment: { type: String },
+    errorMessages: { type: Array },
   };
 
   createRenderRoot() {
@@ -33,51 +34,72 @@ export class ArticlePage extends LitElement {
     this.fetchComments();
   }
 
-  fetchArticle() {
-    fetchGet("articles/" + encodeURIComponent(this.slug), !!this.auth).then(
-      (r) => {
-        this.article = r.article;
-      }
+  async fetchArticle() {
+    this.errorMessages = [];
+    const res = await fetchGet(
+      "articles/" + encodeURIComponent(this.slug),
+      true
     );
-  }
-
-  fetchComments() {
-    this.comments = null;
-    fetchGet("articles/" + encodeURIComponent(this.slug) + "/comments").then(
-      (r) => {
-        this.comments = r.comments;
-      }
-    );
-  }
-
-  postComment() {
-    const newComment = (this.comment || "").trim();
-    if (newComment && newComment.length) {
-      fetchPost(
-        "articles/" + encodeURIComponent(this.slug) + "/comments",
-        JSON.stringify({
-          comment: {
-            body: newComment,
-          },
-        }),
-        true
-      ).then((r) => {
-        this.comment = "";
-        fetchComments();
-      });
+    if (res.article) {
+      this.article = res.article;
+    } else if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
     }
   }
 
-  deleteComment(commentId) {
-    fetchDelete(
+  async fetchComments() {
+    this.comments = null;
+    this.errorMessages = [];
+    const res = await fetchGet(
+      "articles/" + encodeURIComponent(this.slug) + "/comments"
+    );
+    if (res.comments) {
+      this.comments = res.comments;
+    } else if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    }
+  }
+
+  async postComment() {
+    const body = (this.comment || "").trim();
+    if (body && body.length) {
+      this.errorMessages = [];
+      const res = await fetchPost(
+        "articles/" + encodeURIComponent(this.slug) + "/comments",
+        { comment: { body } },
+        true
+      );
+      if (res.comment) {
+        this.comment = "";
+        this.fetchComments();
+      } else if (res.errors) {
+        this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+          res.errors[k].map((m) => k + " " + m)
+        );
+      }
+    }
+  }
+
+  async deleteComment(commentId) {
+    this.errorMessages = [];
+    const res = await fetchDelete(
       "articles/" +
         encodeURIComponent(this.slug) +
         "/comments/" +
         encodeURIComponent(commentId),
       true
-    ).then((r) => {
-      fetchComments();
-    });
+    );
+    if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    } else {
+      this.fetchComments();
+    }
   }
 
   render() {
@@ -88,6 +110,9 @@ export class ArticlePage extends LitElement {
           <div class="container">${this.renderArticleBanner()}</div>
         </div>
         <div class="container page">
+          <ul class="error-messages">
+            ${map(this.errorMessages, (item) => html`<li>${item}</li>`)}
+          </ul>
           ${this.renderArticle()}
           <div class="row">
             <div class="col-xs-12 col-md-8 offset-md-2">

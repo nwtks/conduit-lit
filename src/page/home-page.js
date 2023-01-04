@@ -19,6 +19,7 @@ export class HomePage extends LitElement {
     feed: { type: String },
     tag: { type: String },
     offset: { type: Number },
+    errorMessages: { type: Array },
   };
 
   createRenderRoot() {
@@ -69,20 +70,32 @@ export class HomePage extends LitElement {
     }
   }
 
-  fetchArticles(params, reqAuth) {
+  async fetchArticles(params, reqAuth) {
     this.articles = null;
     this.articlesCount = 0;
-    fetchGet("articles" + params, reqAuth).then((r) => {
-      this.articles = r.articles;
-      this.articlesCount = r.articlesCount;
-    });
+    this.errorMessages = [];
+    const res = await fetchGet("articles" + params, reqAuth);
+    if (res.articles) {
+      this.articles = res.articles;
+      this.articlesCount = res.articlesCount;
+    } else if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    }
   }
 
-  fetchTags() {
+  async fetchTags() {
     this.tags = null;
-    fetchGet("tags").then((r) => {
-      this.tags = r.tags;
-    });
+    this.errorMessages = [];
+    const res = await fetchGet("tags");
+    if (res.tags) {
+      this.tags = res.tags;
+    } else if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    }
   }
 
   renderActive(feed) {
@@ -100,6 +113,9 @@ export class HomePage extends LitElement {
           </div>
         </div>
         <div class="container page">
+          <ul class="error-messages">
+            ${map(this.errorMessages, (item) => html`<li>${item}</li>`)}
+          </ul>
           <div class="row">
             <div class="col-md-9">
               <div class="feed-toggle">

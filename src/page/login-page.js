@@ -5,7 +5,8 @@ import {
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 import "../component/navbar.js";
 import "../component/footer.js";
-import { authenticate } from "../auth.js";
+import { fetchPost } from "../fetch.js";
+import { setAuth } from "../auth.js";
 
 export class LoginPage extends LitElement {
   static properties = {
@@ -18,17 +19,22 @@ export class LoginPage extends LitElement {
     return this;
   }
 
-  submit() {
+  async submit() {
     this.errorMessages = [];
-    authenticate(this.email, this.password)
-      .then((success) => {
-        location.hash = "#/";
-      })
-      .catch((errors) => {
-        this.errorMessages = Object.keys(errors).flatMap((k) =>
-          errors[k].map((m) => k + " " + m)
-        );
-      });
+    const res = await fetchPost("users/login", {
+      user: {
+        email: this.email,
+        password: this.password,
+      },
+    });
+    if (res.user) {
+      setAuth(res.user);
+      location.hash = "#/";
+    } else if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    }
   }
 
   render() {

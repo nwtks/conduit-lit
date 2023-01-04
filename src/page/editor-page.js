@@ -30,13 +30,22 @@ export class EditorPage extends LitElement {
     }
   }
 
-  fetchArticle() {
-    fetchGet("articles/" + encodeURIComponent(this.slug), true).then((r) => {
-      this.title = r.article.title || "";
-      this.description = r.article.description || "";
-      this.body = r.article.body || "";
-      this.tags = r.article.tagList;
-    });
+  async fetchArticle() {
+    this.errorMessages = [];
+    const res = await fetchGet(
+      "articles/" + encodeURIComponent(this.slug),
+      true
+    );
+    if (res.article) {
+      this.title = res.article.title || "";
+      this.description = res.article.description || "";
+      this.body = res.article.body || "";
+      this.tags = res.article.tagList;
+    } else if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    }
   }
 
   addTag(e) {
@@ -59,7 +68,7 @@ export class EditorPage extends LitElement {
     this.tags = this.tags.filter((v) => v !== tag);
   }
 
-  submit() {
+  async submit() {
     const data = {
       article: {
         title: this.title,
@@ -68,31 +77,30 @@ export class EditorPage extends LitElement {
         tagList: this.tags,
       },
     };
-    this.errorMessages = [];
     if (this.slug) {
-      fetchPut(
+      this.errorMessages = [];
+      const res = await fetchPut(
         "articles/" + encodeURIComponent(this.slug),
-        JSON.stringify(data),
+        data,
         true
-      ).then((r) => {
-        if (r.errors) {
-          this.errorMessages = Object.keys(r.errors).flatMap((k) =>
-            r.errors[k].map((m) => k + " " + m)
-          );
-        } else {
-          location.hash = "#/article/" + r.article.slug;
-        }
-      });
+      );
+      if (res.article) {
+        location.hash = "#/article/" + res.article.slug;
+      } else if (res.errors) {
+        this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+          res.errors[k].map((m) => k + " " + m)
+        );
+      }
     } else {
-      fetchPost("articles", JSON.stringify(data), true).then((r) => {
-        if (r.errors) {
-          this.errorMessages = Object.keys(r.errors).flatMap((k) =>
-            r.errors[k].map((m) => k + " " + m)
-          );
-        } else {
-          location.hash = "#/article/" + r.article.slug;
-        }
-      });
+      this.errorMessages = [];
+      const res = await fetchPost("articles", data, true);
+      if (res.article) {
+        location.hash = "#/article/" + res.article.slug;
+      } else if (res.errors) {
+        this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+          res.errors[k].map((m) => k + " " + m)
+        );
+      }
     }
   }
 

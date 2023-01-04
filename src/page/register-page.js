@@ -20,27 +20,23 @@ export class RegisterPage extends LitElement {
     return this;
   }
 
-  submit() {
+  async submit() {
     this.errorMessages = [];
-    fetchPost(
-      "users",
-      JSON.stringify({
-        user: {
-          username: this.username,
-          email: this.email,
-          password: this.password,
-        },
-      })
-    ).then((r) => {
-      if (r.errors) {
-        this.errorMessages = Object.keys(r.errors).flatMap((k) =>
-          r.errors[k].map((m) => k + " " + m)
-        );
-      } else {
-        setAuth(r.user);
-        location.hash = "#/";
-      }
+    const res = await fetchPost("users", {
+      user: {
+        username: this.username,
+        email: this.email,
+        password: this.password,
+      },
     });
+    if (res.user) {
+      setAuth(res.user);
+      location.hash = "#/";
+    } else if (res.errors) {
+      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
+        res.errors[k].map((m) => k + " " + m)
+      );
+    }
   }
 
   render() {
