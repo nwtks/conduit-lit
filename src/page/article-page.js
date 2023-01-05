@@ -1,11 +1,5 @@
-import {
-  LitElement,
-  html,
-  map,
-  when,
-  unsafeHTML,
-} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
-import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+import { LitElement, html, map, when, unsafeHTML } from "../lit.js";
+import { marked } from "../marked.js";
 import "../component/navbar.js";
 import "../component/footer.js";
 import "../component/article-meta.js";

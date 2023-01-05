@@ -1,8 +1,4 @@
-import {
-  LitElement,
-  html,
-  map,
-} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { LitElement, html, map } from "../lit.js";
 import { importStyles } from "../style.js";
 
 export class TagList extends LitElement {

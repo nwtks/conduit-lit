@@ -1,7 +1,4 @@
-import {
-  LitElement,
-  html,
-} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { LitElement, html } from "../lit.js";
 import { importStyles } from "../style.js";
 import { fetchPost, fetchDelete } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";

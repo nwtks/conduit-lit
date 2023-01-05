@@ -1,8 +1,4 @@
-import {
-  LitElement,
-  html,
-  map,
-} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { LitElement, html, map } from "../lit.js";
 import "./article-meta.js";
 import "./tag-list.js";
 import { importStyles } from "../style.js";

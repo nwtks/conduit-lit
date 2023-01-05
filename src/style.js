@@ -1,4 +1,4 @@
-import { html } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { html } from "./lit.js";
 
 export const importStyles = () =>
   html`

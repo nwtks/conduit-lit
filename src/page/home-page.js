@@ -1,9 +1,4 @@
-import {
-  LitElement,
-  html,
-  map,
-  when,
-} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { LitElement, html, map, when } from "../lit.js";
 import "../component/navbar.js";
 import "../component/footer.js";
 import "../component/article-previews.js";

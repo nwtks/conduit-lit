@@ -1,9 +1,4 @@
-import {
-  LitElement,
-  html,
-  map,
-  range,
-} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { LitElement, html, map, range } from "../lit.js";
 import { importStyles } from "../style.js";
 
 export class Pagination extends LitElement {

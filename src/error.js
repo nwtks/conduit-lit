@@ -1,7 +1,4 @@
-import {
-  html,
-  map,
-} from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { html, map } from "./lit.js";
 
 export const addErrorMessages = (messages, errors) =>
   messages.concat(
