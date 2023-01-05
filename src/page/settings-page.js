@@ -55,7 +55,7 @@ export class SettingsPage extends LitElement {
         email: this.email,
       },
     };
-    if (this.password && this.password.length) {
+    if (this.password) {
       data.user.password = this.password;
     }
 

@@ -63,7 +63,7 @@ export class ArticlePage extends LitElement {
 
   async postComment() {
     const body = (this.comment || "").trim();
-    if (body && body.length) {
+    if (body) {
       this.errorMessages = [];
       const res = await fetchPost(
         "articles/" + encodeURIComponent(this.slug) + "/comments",
