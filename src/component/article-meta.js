@@ -2,6 +2,7 @@ import {
   LitElement,
   html,
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { importStyles } from "../style.js";
 import { fetchPost, fetchDelete } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { formatDate } from "../format.js";
@@ -14,10 +15,6 @@ export class ArticleMeta extends LitElement {
     actions: { type: Boolean },
     errorMessages: { type: Array },
   };
-
-  createRenderRoot() {
-    return this;
-  }
 
   async delete() {
     this.errorMessages = [];
@@ -100,6 +97,7 @@ export class ArticleMeta extends LitElement {
 
   render() {
     return html`
+      ${importStyles()}
       <div class="article-meta">
         <a href="#/profile/${this.article.author.username}">
           <img src=${this.article.author.image || no_image} />

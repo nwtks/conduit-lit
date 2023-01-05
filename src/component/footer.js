@@ -2,14 +2,12 @@ import {
   LitElement,
   html,
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { importStyles } from "../style.js";
 
 export class Footer extends LitElement {
-  createRenderRoot() {
-    return this;
-  }
-
   render() {
     return html`
+      ${importStyles()}
       <footer>
         <div class="container">
           <a href="#/" class="logo-font">conduit</a>

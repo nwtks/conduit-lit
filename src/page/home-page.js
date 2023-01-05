@@ -8,6 +8,7 @@ import "../component/navbar.js";
 import "../component/footer.js";
 import "../component/article-previews.js";
 import "../component/pagination.js";
+import { importStyles } from "../style.js";
 import { fetchGet } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
 
@@ -22,10 +23,6 @@ export class HomePage extends LitElement {
     offset: { type: Number },
     errorMessages: { type: Array },
   };
-
-  createRenderRoot() {
-    return this;
-  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -101,6 +98,7 @@ export class HomePage extends LitElement {
 
   render() {
     return html`
+      ${importStyles()}
       <c-navbar .auth=${this.auth} path="home"></c-navbar>
       <div class="home-page">
         <div class="banner">
