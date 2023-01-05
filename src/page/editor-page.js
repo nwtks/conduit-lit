@@ -59,8 +59,6 @@ export class EditorPage extends LitElement {
         }
         this.tags.push(newTag);
       }
-    } else {
-      this.tag = e.target.value;
     }
   }
 
@@ -149,7 +147,8 @@ export class EditorPage extends LitElement {
                       type="text"
                       placeholder="Enter tags"
                       .value=${this.tag || ""}
-                      @keydown=${this.addTag}
+                      @keypress=${this.addTag}
+                      @input=${(e) => (this.tag = e.target.value)}
                     />
                     <div class="tag-list">
                       ${map(
