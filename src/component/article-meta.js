@@ -1,9 +1,9 @@
 import {
   LitElement,
   html,
-  map,
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 import { fetchPost, fetchDelete } from "../fetch.js";
+import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { formatDate } from "../format.js";
 import { no_image } from "../config.js";
 
@@ -26,9 +26,7 @@ export class ArticleMeta extends LitElement {
       true
     );
     if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     } else {
       location.hash = "#/";
     }
@@ -47,9 +45,7 @@ export class ArticleMeta extends LitElement {
         if (res.profile) {
           this.article.author.following = res.profile.following;
         } else if (res.errors) {
-          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-            res.errors[k].map((m) => k + " " + m)
-          );
+          this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
       } else {
         this.errorMessages = [];
@@ -63,9 +59,7 @@ export class ArticleMeta extends LitElement {
         if (res.profile) {
           this.article.author.following = res.profile.following;
         } else if (res.errors) {
-          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-            res.errors[k].map((m) => k + " " + m)
-          );
+          this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
       }
     } else {
@@ -84,9 +78,7 @@ export class ArticleMeta extends LitElement {
         if (res.article) {
           this.article = res.article;
         } else if (res.errors) {
-          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-            res.errors[k].map((m) => k + " " + m)
-          );
+          this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
       } else {
         this.errorMessages = [];
@@ -98,9 +90,7 @@ export class ArticleMeta extends LitElement {
         if (res.article) {
           this.article = res.article;
         } else if (res.errors) {
-          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-            res.errors[k].map((m) => k + " " + m)
-          );
+          this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
       }
     } else {
@@ -120,10 +110,7 @@ export class ArticleMeta extends LitElement {
           </a>
           <span class="date">${formatDate(this.article.createdAt)}</span>
         </div>
-        <ul class="error-messages">
-          ${map(this.errorMessages, (item) => html`<li>${item}</li>`)}
-        </ul>
-        ${this.renderAction()}
+        ${renderErrorMessages(this.errorMessages)}${this.renderAction()}
       </div>
     `;
   }

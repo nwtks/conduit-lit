@@ -6,6 +6,7 @@ import {
 import "../component/navbar.js";
 import "../component/footer.js";
 import { fetchGet, fetchPost, fetchPut } from "../fetch.js";
+import { addErrorMessages, renderErrorMessages } from "../error.js";
 
 export class EditorPage extends LitElement {
   static properties = {
@@ -42,9 +43,7 @@ export class EditorPage extends LitElement {
       this.body = res.article.body || "";
       this.tags = res.article.tagList;
     } else if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     }
   }
 
@@ -85,9 +84,7 @@ export class EditorPage extends LitElement {
       if (res.article) {
         location.hash = "#/article/" + res.article.slug;
       } else if (res.errors) {
-        this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-          res.errors[k].map((m) => k + " " + m)
-        );
+        this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
       }
     } else {
       this.errorMessages = [];
@@ -95,9 +92,7 @@ export class EditorPage extends LitElement {
       if (res.article) {
         location.hash = "#/article/" + res.article.slug;
       } else if (res.errors) {
-        this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-          res.errors[k].map((m) => k + " " + m)
-        );
+        this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
       }
     }
   }
@@ -109,9 +104,7 @@ export class EditorPage extends LitElement {
         <div class="container page">
           <div class="row">
             <div class="col-md-10 offset-md-1 col-xs-12">
-              <ul class="error-messages">
-                ${map(this.errorMessages, (item) => html`<li>${item}</li>`)}
-              </ul>
+              ${renderErrorMessages(this.errorMessages)}
               <form>
                 <fieldset>
                   <fieldset class="form-group">

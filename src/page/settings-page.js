@@ -1,11 +1,11 @@
 import {
   LitElement,
   html,
-  map,
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 import "../component/navbar.js";
 import "../component/footer.js";
 import { fetchGet, fetchPut } from "../fetch.js";
+import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { setAuth, clearAuth } from "../auth.js";
 
 export class SettingsPage extends LitElement {
@@ -37,9 +37,7 @@ export class SettingsPage extends LitElement {
       this.bio = res.user.bio || "";
       this.email = res.user.email || "";
     } else if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     }
   }
 
@@ -67,9 +65,7 @@ export class SettingsPage extends LitElement {
       setAuth(res.user);
       location.hash = "#/";
     } else if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     }
   }
 
@@ -81,9 +77,7 @@ export class SettingsPage extends LitElement {
           <div class="row">
             <div class="col-md-6 offset-md-3 col-xs-12">
               <h1 class="text-xs-center">Your settings</h1>
-              <ul class="error-messages">
-                ${map(this.errorMessages, (item) => html`<li>${item}</li>`)}
-              </ul>
+              ${renderErrorMessages(this.errorMessages)}
               <form>
                 <fieldset>
                   <fieldset class="form-group">

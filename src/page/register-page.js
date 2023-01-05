@@ -1,11 +1,11 @@
 import {
   LitElement,
   html,
-  map,
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 import "../component/navbar.js";
 import "../component/footer.js";
 import { fetchPost } from "../fetch.js";
+import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { setAuth } from "../auth.js";
 
 export class RegisterPage extends LitElement {
@@ -33,9 +33,7 @@ export class RegisterPage extends LitElement {
       setAuth(res.user);
       location.hash = "#/";
     } else if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     }
   }
 
@@ -50,9 +48,7 @@ export class RegisterPage extends LitElement {
               <p class="text-xs-center">
                 <a href="#/login">Have an account?</a>
               </p>
-              <ul class="error-messages">
-                ${map(this.errorMessages, (item) => html`<li>${item}</li>`)}
-              </ul>
+              ${renderErrorMessages(this.errorMessages)}
               <form>
                 <fieldset class="form-group">
                   <input

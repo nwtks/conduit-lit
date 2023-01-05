@@ -1,13 +1,13 @@
 import {
   LitElement,
   html,
-  map,
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 import "../component/navbar.js";
 import "../component/footer.js";
 import "../component/article-previews.js";
 import "../component/pagination.js";
 import { fetchGet, fetchPost, fetchDelete } from "../fetch.js";
+import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { no_image } from "../config.js";
 
 export class ProfilePage extends LitElement {
@@ -76,9 +76,7 @@ export class ProfilePage extends LitElement {
       this.articles = res.articles;
       this.articlesCount = res.articlesCount;
     } else if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     }
   }
 
@@ -91,9 +89,7 @@ export class ProfilePage extends LitElement {
     if (res.profile) {
       this.profile = res.profile;
     } else if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     }
   }
 
@@ -108,9 +104,7 @@ export class ProfilePage extends LitElement {
         if (res.profile) {
           this.profile = res.profile;
         } else if (res.errors) {
-          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-            res.errors[k].map((m) => k + " " + m)
-          );
+          this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
       } else {
         this.errorMessages = [];
@@ -122,9 +116,7 @@ export class ProfilePage extends LitElement {
         if (res.profile) {
           this.profile = res.profile;
         } else if (res.errors) {
-          this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-            res.errors[k].map((m) => k + " " + m)
-          );
+          this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
       }
     } else {
@@ -144,9 +136,7 @@ export class ProfilePage extends LitElement {
           <div class="container">${this.renderProfile()}</div>
         </div>
         <div class="container">
-          <ul class="error-messages">
-            ${map(this.errorMessages, (item) => html`<li>${item}</li>`)}
-          </ul>
+          ${renderErrorMessages(this.errorMessages)}
           <div class="row">
             <div class="col-xs-12 col-md-10 offset-md-1">
               <div class="articles-toggle">

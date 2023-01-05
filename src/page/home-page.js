@@ -9,6 +9,7 @@ import "../component/footer.js";
 import "../component/article-previews.js";
 import "../component/pagination.js";
 import { fetchGet } from "../fetch.js";
+import { addErrorMessages, renderErrorMessages } from "../error.js";
 
 export class HomePage extends LitElement {
   static properties = {
@@ -79,9 +80,7 @@ export class HomePage extends LitElement {
       this.articles = res.articles;
       this.articlesCount = res.articlesCount;
     } else if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     }
   }
 
@@ -92,9 +91,7 @@ export class HomePage extends LitElement {
     if (res.tags) {
       this.tags = res.tags;
     } else if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     }
   }
 
@@ -113,9 +110,7 @@ export class HomePage extends LitElement {
           </div>
         </div>
         <div class="container page">
-          <ul class="error-messages">
-            ${map(this.errorMessages, (item) => html`<li>${item}</li>`)}
-          </ul>
+          ${renderErrorMessages(this.errorMessages)}
           <div class="row">
             <div class="col-md-9">
               <div class="feed-toggle">

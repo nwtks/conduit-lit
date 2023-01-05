@@ -11,6 +11,7 @@ import "../component/footer.js";
 import "../component/article-meta.js";
 import "../component/tag-list.js";
 import { fetchGet, fetchPost, fetchDelete } from "../fetch.js";
+import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { formatDate } from "../format.js";
 import { no_image } from "../config.js";
 
@@ -43,9 +44,7 @@ export class ArticlePage extends LitElement {
     if (res.article) {
       this.article = res.article;
     } else if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     }
   }
 
@@ -58,9 +57,7 @@ export class ArticlePage extends LitElement {
     if (res.comments) {
       this.comments = res.comments;
     } else if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     }
   }
 
@@ -77,9 +74,7 @@ export class ArticlePage extends LitElement {
         this.comment = "";
         this.fetchComments();
       } else if (res.errors) {
-        this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-          res.errors[k].map((m) => k + " " + m)
-        );
+        this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
       }
     }
   }
@@ -94,9 +89,7 @@ export class ArticlePage extends LitElement {
       true
     );
     if (res.errors) {
-      this.errorMessages = Object.keys(res.errors).flatMap((k) =>
-        res.errors[k].map((m) => k + " " + m)
-      );
+      this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
     } else {
       this.fetchComments();
     }
@@ -110,10 +103,7 @@ export class ArticlePage extends LitElement {
           <div class="container">${this.renderArticleBanner()}</div>
         </div>
         <div class="container page">
-          <ul class="error-messages">
-            ${map(this.errorMessages, (item) => html`<li>${item}</li>`)}
-          </ul>
-          ${this.renderArticle()}
+          ${renderErrorMessages(this.errorMessages)}${this.renderArticle()}
           <div class="row">
             <div class="col-xs-12 col-md-8 offset-md-2">
               ${this.renderCommentForm()}${this.renderComments()}
