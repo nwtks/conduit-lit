@@ -4,6 +4,7 @@ import {
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 import "../component/navbar.js";
 import "../component/footer.js";
+import { importStyles } from "../style.js";
 import { fetchGet, fetchPut } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { setAuth, clearAuth } from "../auth.js";
@@ -18,10 +19,6 @@ export class SettingsPage extends LitElement {
     password: { type: String },
     errorMessages: { type: Array },
   };
-
-  createRenderRoot() {
-    return this;
-  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -71,6 +68,7 @@ export class SettingsPage extends LitElement {
 
   render() {
     return html`
+      ${importStyles()}
       <c-navbar .auth=${this.auth} path="settings"></c-navbar>
       <div class="settings-page">
         <div class="container page">

@@ -3,6 +3,7 @@ import {
   html,
   when,
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { importStyles } from "../style.js";
 import { no_image } from "../config.js";
 
 export class Navbar extends LitElement {
@@ -11,16 +12,13 @@ export class Navbar extends LitElement {
     path: { type: String },
   };
 
-  createRenderRoot() {
-    return this;
-  }
-
   renderActive(path) {
     return this.path === path ? "active" : "";
   }
 
   render() {
     return html`
+      ${importStyles()}
       <nav class="navbar navbar-light">
         <div class="container">
           <a class="navbar-brand" href="#/">conduit</a>

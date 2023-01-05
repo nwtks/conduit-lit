@@ -10,6 +10,7 @@ import "../component/navbar.js";
 import "../component/footer.js";
 import "../component/article-meta.js";
 import "../component/tag-list.js";
+import { importStyles } from "../style.js";
 import { fetchGet, fetchPost, fetchDelete } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { formatDate } from "../format.js";
@@ -24,10 +25,6 @@ export class ArticlePage extends LitElement {
     comment: { type: String },
     errorMessages: { type: Array },
   };
-
-  createRenderRoot() {
-    return this;
-  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -97,6 +94,7 @@ export class ArticlePage extends LitElement {
 
   render() {
     return html`
+      ${importStyles()}
       <c-navbar .auth=${this.auth}></c-navbar>
       <div class="article-page">
         <div class="banner">

@@ -4,6 +4,7 @@ import {
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 import "../component/navbar.js";
 import "../component/footer.js";
+import { importStyles } from "../style.js";
 import { fetchPost } from "../fetch.js";
 import { setAuth } from "../auth.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
@@ -14,10 +15,6 @@ export class LoginPage extends LitElement {
     password: { type: String },
     errorMessages: { type: Array },
   };
-
-  createRenderRoot() {
-    return this;
-  }
 
   async submit() {
     this.errorMessages = [];
@@ -37,6 +34,7 @@ export class LoginPage extends LitElement {
 
   render() {
     return html`
+      ${importStyles()}
       <c-navbar path="login"></c-navbar>
       <div class="auth-page">
         <div class="container page">

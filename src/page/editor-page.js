@@ -5,6 +5,7 @@ import {
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
 import "../component/navbar.js";
 import "../component/footer.js";
+import { importStyles } from "../style.js";
 import { fetchGet, fetchPost, fetchPut } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
 
@@ -19,10 +20,6 @@ export class EditorPage extends LitElement {
     tags: { type: Array },
     errorMessages: { type: Array },
   };
-
-  createRenderRoot() {
-    return this;
-  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -99,6 +96,7 @@ export class EditorPage extends LitElement {
 
   render() {
     return html`
+      ${importStyles()}
       <c-navbar .auth=${this.auth} path="editor"></c-navbar>
       <div class="editor-page">
         <div class="container page">

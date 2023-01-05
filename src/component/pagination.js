@@ -4,6 +4,7 @@ import {
   map,
   range,
 } from "https://cdn.jsdelivr.net/gh/lit/dist/all/lit-all.min.js";
+import { importStyles } from "../style.js";
 
 export class Pagination extends LitElement {
   static properties = {
@@ -11,10 +12,6 @@ export class Pagination extends LitElement {
     offset: { type: Number },
     total: { type: Number },
   };
-
-  createRenderRoot() {
-    return this;
-  }
 
   paging(offset) {
     this.dispatchEvent(
@@ -29,6 +26,7 @@ export class Pagination extends LitElement {
 
   render() {
     return html`
+      ${importStyles()}
       <nav>
         <ul class="pagination">
           ${map(
