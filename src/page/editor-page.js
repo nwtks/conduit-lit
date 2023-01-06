@@ -28,6 +28,7 @@ export class EditorPage extends LitElement {
     this.errorMessages = [];
     const res = await fetchGet(
       "articles/" + encodeURIComponent(this.slug),
+      {},
       true
     );
     if (res.article) {

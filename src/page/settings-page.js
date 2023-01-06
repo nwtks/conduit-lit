@@ -24,7 +24,7 @@ export class SettingsPage extends LitElement {
 
   async fetchSettings() {
     this.errorMessages = [];
-    const res = await fetchGet("user", true);
+    const res = await fetchGet("user", {}, true);
     if (res.user) {
       this.image = res.user.image || "";
       this.username = res.user.username || "";

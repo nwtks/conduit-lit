@@ -3,7 +3,7 @@ import { getAuth } from "./auth.js";
 
 const fetchWithHeaders = async (reqAuth, fetch) => {
   const headers = {
-    Accept: "application/json, text/plain, */*",
+    Accept: "application/json, */*",
     "Content-Type": "application/json",
   };
   if (reqAuth) {
@@ -24,35 +24,29 @@ const fetchWithHeaders = async (reqAuth, fetch) => {
   return await res.json();
 };
 
-export const fetchGet = (path, reqAuth) =>
-  fetchWithHeaders(reqAuth, (headers) =>
-    fetch(server_url + path, {
-      headers: headers,
-    })
-  );
+export const fetchGet = (path, params, reqAuth) => {
+  const url = new URL(path, server_url);
+  url.search = new URLSearchParams(params);
+  return fetchWithHeaders(reqAuth, (headers) => fetch(url, { headers }));
+};
 
-export const fetchPost = (path, body, reqAuth) =>
-  fetchWithHeaders(reqAuth, (headers) =>
-    fetch(server_url + path, {
-      headers: headers,
-      method: "POST",
-      body: JSON.stringify(body),
-    })
+export const fetchPost = (path, body, reqAuth) => {
+  const url = new URL(path, server_url);
+  return fetchWithHeaders(reqAuth, (headers) =>
+    fetch(url, { headers, method: "POST", body: JSON.stringify(body) })
   );
+};
 
-export const fetchPut = (path, body, reqAuth) =>
-  fetchWithHeaders(reqAuth, (headers) =>
-    fetch(server_url + path, {
-      headers: headers,
-      method: "PUT",
-      body: JSON.stringify(body),
-    })
+export const fetchPut = (path, body, reqAuth) => {
+  const url = new URL(path, server_url);
+  return fetchWithHeaders(reqAuth, (headers) =>
+    fetch(url, { headers, method: "PUT", body: JSON.stringify(body) })
   );
+};
 
-export const fetchDelete = (path, reqAuth) =>
-  fetchWithHeaders(reqAuth, (headers) =>
-    fetch(server_url + path, {
-      headers: headers,
-      method: "DELETE",
-    })
+export const fetchDelete = (path, body, reqAuth) => {
+  const url = new URL(path, server_url);
+  return fetchWithHeaders(reqAuth, (headers) =>
+    fetch(url, { headers, method: "DELETE", body: JSON.stringify(body) })
   );
+};

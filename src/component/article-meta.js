@@ -17,6 +17,7 @@ export class ArticleMeta extends LitElement {
     this.errorMessages = [];
     const res = await fetchDelete(
       "articles/" + encodeURIComponent(this.article.slug),
+      {},
       true
     );
     if (res.errors) {
@@ -34,10 +35,12 @@ export class ArticleMeta extends LitElement {
           "profiles/" +
             encodeURIComponent(this.article.author.username) +
             "/follow",
+          {},
           true
         );
         if (res.profile) {
           this.article.author.following = res.profile.following;
+          this.article = Object.assign({}, this.article);
         } else if (res.errors) {
           this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
@@ -52,6 +55,7 @@ export class ArticleMeta extends LitElement {
         );
         if (res.profile) {
           this.article.author.following = res.profile.following;
+          this.article = Object.assign({}, this.article);
         } else if (res.errors) {
           this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
@@ -67,6 +71,7 @@ export class ArticleMeta extends LitElement {
         this.errorMessages = [];
         const res = await fetchDelete(
           "articles/" + encodeURIComponent(this.article.slug) + "/favorite",
+          {},
           true
         );
         if (res.article) {

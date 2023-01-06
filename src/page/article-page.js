@@ -30,6 +30,7 @@ export class ArticlePage extends LitElement {
     this.errorMessages = [];
     const res = await fetchGet(
       "articles/" + encodeURIComponent(this.slug),
+      {},
       true
     );
     if (res.article) {
@@ -43,7 +44,8 @@ export class ArticlePage extends LitElement {
     this.comments = null;
     this.errorMessages = [];
     const res = await fetchGet(
-      "articles/" + encodeURIComponent(this.slug) + "/comments"
+      "articles/" + encodeURIComponent(this.slug) + "/comments",
+      {}
     );
     if (res.comments) {
       this.comments = res.comments;
@@ -77,6 +79,7 @@ export class ArticlePage extends LitElement {
         encodeURIComponent(this.slug) +
         "/comments/" +
         encodeURIComponent(commentId),
+      {},
       true
     );
     if (res.errors) {

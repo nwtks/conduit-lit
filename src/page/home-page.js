@@ -33,41 +33,39 @@ export class HomePage extends LitElement {
     this.feed = "your";
     this.tag = null;
     this.offset = 0;
-    this.fetchArticles("/feed?limit=10&offset=0", true);
+    this.fetchArticles("/feed", { limit: 10, offset: 0 }, true);
   }
 
   fetchGlobalFeed() {
     this.feed = "global";
     this.tag = null;
     this.offset = 0;
-    this.fetchArticles("?limit=10&offset=0");
+    this.fetchArticles("", { limit: 10, offset: 0 });
   }
 
   fetchTagged(tag) {
     this.feed = null;
     this.tag = tag;
     this.offset = 0;
-    this.fetchArticles("?limit=10&offset=0&tag=" + encodeURIComponent(tag));
+    this.fetchArticles("", { limit: 10, offset: 0, tag });
   }
 
   fetchPage(offset) {
     this.offset = offset;
     if (this.tag) {
-      this.fetchArticles(
-        "?limit=10&offset=" + offset + "&tag=" + encodeURIComponent(this.tag)
-      );
+      this.fetchArticles("", { limit: 10, offset, tag: this.tag });
     } else if (this.feed === "your") {
-      this.fetchArticles("/feed?limit=10&offset=" + offset, true);
+      this.fetchArticles("/feed", { limit: 10, offset }, true);
     } else {
-      this.fetchArticles("?limit=10&offset=" + offset);
+      this.fetchArticles("", { limit: 10, offset });
     }
   }
 
-  async fetchArticles(params, reqAuth) {
+  async fetchArticles(path, params, reqAuth) {
     this.articles = null;
     this.articlesCount = 0;
     this.errorMessages = [];
-    const res = await fetchGet("articles" + params, reqAuth);
+    const res = await fetchGet("articles" + path, params, reqAuth);
     if (res.articles) {
       this.articles = res.articles;
       this.articlesCount = res.articlesCount;
@@ -79,7 +77,7 @@ export class HomePage extends LitElement {
   async fetchTags() {
     this.tags = null;
     this.errorMessages = [];
-    const res = await fetchGet("tags");
+    const res = await fetchGet("tags", {});
     if (res.tags) {
       this.tags = res.tags;
     } else if (res.errors) {

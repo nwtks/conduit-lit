@@ -29,35 +29,21 @@ export class ProfilePage extends LitElement {
   fetchMyArticles() {
     this.article = "author";
     this.offset = 0;
-    this.fetchArticles(
-      "?limit=5&offset=0&author=" + encodeURIComponent(this.username)
-    );
+    this.fetchArticles({ limit: 5, offset: 0, author: this.username });
   }
 
   fetchFavoritedArticles() {
     this.article = "favorited";
     this.offset = 0;
-    this.fetchArticles(
-      "?limit=5&offset=0&favorited=" + encodeURIComponent(this.username)
-    );
+    this.fetchArticles({ limit: 5, offset: 0, favorited: this.username });
   }
 
   fetchPage(offset) {
     this.offset = offset;
     if (this.article === "favorited") {
-      this.fetchArticles(
-        "?limit=5&offset=" +
-          offset +
-          "&favorited=" +
-          encodeURIComponent(this.username)
-      );
+      this.fetchArticles({ limit: 5, offset, favorited: this.username });
     } else {
-      this.fetchArticles(
-        "?limit=5&offset=" +
-          offset +
-          "&author=" +
-          encodeURIComponent(this.username)
-      );
+      this.fetchArticles({ limit: 5, offset, author: this.username });
     }
   }
 
@@ -65,7 +51,7 @@ export class ProfilePage extends LitElement {
     this.articles = null;
     this.articlesCount = 0;
     this.errorMessages = [];
-    const res = await fetchGet("articles" + params, true);
+    const res = await fetchGet("articles", params, true);
     if (res.articles) {
       this.articles = res.articles;
       this.articlesCount = res.articlesCount;
@@ -78,6 +64,7 @@ export class ProfilePage extends LitElement {
     this.errorMessages = [];
     const res = await fetchGet(
       "profiles/" + encodeURIComponent(this.username),
+      {},
       true
     );
     if (res.profile) {
@@ -93,6 +80,7 @@ export class ProfilePage extends LitElement {
         this.errorMessages = [];
         const res = await fetchDelete(
           "profiles/" + encodeURIComponent(this.profile.username) + "/follow",
+          {},
           true
         );
         if (res.profile) {
