@@ -22,6 +22,7 @@ export class ArticlePage extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    this.comment = "";
     this.fetchArticle();
     this.fetchComments();
   }
@@ -29,7 +30,7 @@ export class ArticlePage extends LitElement {
   async fetchArticle() {
     this.errorMessages = [];
     const res = await fetchGet(
-      "articles/" + encodeURIComponent(this.slug),
+      `articles/${encodeURIComponent(this.slug)}`,
       {},
       true
     );
@@ -44,7 +45,7 @@ export class ArticlePage extends LitElement {
     this.comments = null;
     this.errorMessages = [];
     const res = await fetchGet(
-      "articles/" + encodeURIComponent(this.slug) + "/comments",
+      `articles/${encodeURIComponent(this.slug)}/comments`,
       {}
     );
     if (res.comments) {
@@ -55,11 +56,11 @@ export class ArticlePage extends LitElement {
   }
 
   async postComment() {
-    const body = (this.comment || "").trim();
+    const body = this.comment.trim();
     if (body) {
       this.errorMessages = [];
       const res = await fetchPost(
-        "articles/" + encodeURIComponent(this.slug) + "/comments",
+        `articles/${encodeURIComponent(this.slug)}/comments`,
         { comment: { body } },
         true
       );
@@ -75,10 +76,9 @@ export class ArticlePage extends LitElement {
   async deleteComment(commentId) {
     this.errorMessages = [];
     const res = await fetchDelete(
-      "articles/" +
-        encodeURIComponent(this.slug) +
-        "/comments/" +
-        encodeURIComponent(commentId),
+      `articles/${encodeURIComponent(this.slug)}/comments/${encodeURIComponent(
+        commentId
+      )}`,
       {},
       true
     );
@@ -115,11 +115,12 @@ export class ArticlePage extends LitElement {
       return html`<p>Loading article...</p>`;
     }
     return html`
-      <h1>${this.article.title || ""}</h1>
+      <h1>${this.article.title}</h1>
       <c-article-meta
         .auth=${this.auth}
         .article=${this.article}
         actions
+        @article-change=${(e) => (this.article = e.detail.article)}
       ></c-article-meta>
     `;
   }
@@ -141,6 +142,7 @@ export class ArticlePage extends LitElement {
           .auth=${this.auth}
           .article=${this.article}
           actions
+          @article-change=${(e) => (this.article = e.detail.article)}
         ></c-article-meta>
       </div>
     `;
@@ -155,7 +157,7 @@ export class ArticlePage extends LitElement {
               class="form-control"
               placeholder="Write a comment..."
               rows="3"
-              .value=${this.comment || ""}
+              .value=${this.comment}
               @change=${(e) => (this.comment = e.target.value)}
             ></textarea>
           </div>
@@ -196,7 +198,7 @@ export class ArticlePage extends LitElement {
       (item) => html`
         <div class="card">
           <div class="card-block">
-            <p class="card-text">${item.body || ""}</p>
+            <p class="card-text">${item.body}</p>
           </div>
           <div class="card-footer">
             <a class="comment-author" href="#/profile/${item.author.username}">

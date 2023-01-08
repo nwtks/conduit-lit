@@ -63,7 +63,7 @@ export class ProfilePage extends LitElement {
   async fetchProfile() {
     this.errorMessages = [];
     const res = await fetchGet(
-      "profiles/" + encodeURIComponent(this.username),
+      `profiles/${encodeURIComponent(this.username)}`,
       {},
       true
     );
@@ -79,7 +79,7 @@ export class ProfilePage extends LitElement {
       if (this.profile.following) {
         this.errorMessages = [];
         const res = await fetchDelete(
-          "profiles/" + encodeURIComponent(this.profile.username) + "/follow",
+          `profiles/${encodeURIComponent(this.profile.username)}/follow`,
           {},
           true
         );
@@ -91,7 +91,7 @@ export class ProfilePage extends LitElement {
       } else {
         this.errorMessages = [];
         const res = await fetchPost(
-          "profiles/" + encodeURIComponent(this.profile.username) + "/follow",
+          `profiles/${encodeURIComponent(this.profile.username)}/follow`,
           {},
           true
         );
@@ -177,7 +177,7 @@ export class ProfilePage extends LitElement {
         <div class="col-xs-12 col-md-10 offset-md-1">
           <img class="user-img" src=${this.profile.image || no_image} />
           <h4>${this.profile.username}</h4>
-          <p>${this.profile.bio || ""}</p>
+          <p>${this.profile.bio}</p>
           ${this.renderProfileAction()}
         </div>
       </div>
@@ -187,19 +187,14 @@ export class ProfilePage extends LitElement {
   renderProfileAction() {
     if (this.auth && this.profile.username === this.auth.username) {
       return html`
-        <a
-          class="btn btn-sm btn-outline-secondary action-btn"
-          href="#/settings"
-        >
+        <a class="btn btn-sm btn-secondary" href="#/settings">
           <i class="ion-gear-a"></i>&#160;Edit profile settings
         </a>
       `;
     }
     return html`
       <button
-        class="btn btn-sm action-btn ${this.profile.following
-          ? "btn-secondary"
-          : "btn-outline-secondary"}"
+        class="btn btn-sm btn-secondary"
         @click=${(e) => {
           e.preventDefault();
           this.toggleFollow();

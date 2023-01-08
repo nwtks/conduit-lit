@@ -16,7 +16,7 @@ export class ArticleMeta extends LitElement {
   async delete() {
     this.errorMessages = [];
     const res = await fetchDelete(
-      "articles/" + encodeURIComponent(this.article.slug),
+      `articles/${encodeURIComponent(this.article.slug)}`,
       {},
       true
     );
@@ -32,30 +32,26 @@ export class ArticleMeta extends LitElement {
       if (this.article.author.following) {
         this.errorMessages = [];
         const res = await fetchDelete(
-          "profiles/" +
-            encodeURIComponent(this.article.author.username) +
-            "/follow",
+          `profiles/${encodeURIComponent(this.article.author.username)}/follow`,
           {},
           true
         );
         if (res.profile) {
           this.article.author.following = res.profile.following;
-          this.article = Object.assign({}, this.article);
+          this.dispatchArticleChange();
         } else if (res.errors) {
           this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
       } else {
         this.errorMessages = [];
         const res = await fetchPost(
-          "profiles/" +
-            encodeURIComponent(this.article.author.username) +
-            "/follow",
+          `profiles/${encodeURIComponent(this.article.author.username)}/follow`,
           {},
           true
         );
         if (res.profile) {
           this.article.author.following = res.profile.following;
-          this.article = Object.assign({}, this.article);
+          this.dispatchArticleChange();
         } else if (res.errors) {
           this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
@@ -70,24 +66,26 @@ export class ArticleMeta extends LitElement {
       if (this.article.favorited) {
         this.errorMessages = [];
         const res = await fetchDelete(
-          "articles/" + encodeURIComponent(this.article.slug) + "/favorite",
+          `articles/${encodeURIComponent(this.article.slug)}/favorite`,
           {},
           true
         );
         if (res.article) {
           this.article = res.article;
+          this.dispatchArticleChange();
         } else if (res.errors) {
           this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
       } else {
         this.errorMessages = [];
         const res = await fetchPost(
-          "articles/" + encodeURIComponent(this.article.slug) + "/favorite",
+          `articles/${encodeURIComponent(this.article.slug)}/favorite`,
           {},
           true
         );
         if (res.article) {
           this.article = res.article;
+          this.dispatchArticleChange();
         } else if (res.errors) {
           this.errorMessages = addErrorMessages(this.errorMessages, res.errors);
         }
@@ -95,6 +93,17 @@ export class ArticleMeta extends LitElement {
     } else {
       location.hash = "#/login";
     }
+  }
+
+  dispatchArticleChange() {
+    this.dispatchEvent(
+      new CustomEvent("article-change", {
+        detail: { article: Object.assign({}, this.article) },
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
+    );
   }
 
   render() {
@@ -121,14 +130,14 @@ export class ArticleMeta extends LitElement {
         return html`
           <span>
             <a
-              class="btn btn-outline-secondary btn-sm"
+              class="btn btn-sm btn-secondary"
               href="#/editor/${this.article.slug}"
             >
               <i class="ion-edit"></i>&#160;Edit article
             </a>
             &#160;&#160;
             <button
-              class="btn btn-sm btn-outline-danger"
+              class="btn btn-sm btn-danger"
               @click=${(e) => {
                 e.preventDefault();
                 this.delete();
@@ -141,9 +150,7 @@ export class ArticleMeta extends LitElement {
       }
       return html`
         <button
-          class="btn btn-sm ${this.article.following
-            ? "btn-secondary"
-            : "btn-outline-secondary"}"
+          class="btn btn-sm btn-secondary"
           @click=${(e) => {
             e.preventDefault();
             this.toggleFollow();

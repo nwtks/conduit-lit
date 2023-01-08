@@ -65,7 +65,7 @@ export class HomePage extends LitElement {
     this.articles = null;
     this.articlesCount = 0;
     this.errorMessages = [];
-    const res = await fetchGet("articles" + path, params, reqAuth);
+    const res = await fetchGet(`articles${path}`, params, reqAuth);
     if (res.articles) {
       this.articles = res.articles;
       this.articlesCount = res.articlesCount;

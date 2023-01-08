@@ -33,8 +33,8 @@ export class ArticlePreviews extends LitElement {
               .article=${item}
             ></c-article-meta>
             <a class="preview-link" href="#/article/${item.slug}">
-              <h1>${item.title || ""}</h1>
-              <p>${item.description || ""}</p>
+              <h1>${item.title}</h1>
+              <p>${item.description}</p>
               <span>Read more...</span>
               <c-tag-list .tags=${item.tagList}></c-tag-list>
             </a>

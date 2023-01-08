@@ -19,6 +19,7 @@ export class SettingsPage extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    this.password = "";
     this.fetchSettings();
   }
 
@@ -72,65 +73,7 @@ export class SettingsPage extends LitElement {
           <div class="row">
             <div class="col-md-6 offset-md-3 col-xs-12">
               <h1 class="text-xs-center">Your settings</h1>
-              ${renderErrorMessages(this.errorMessages)}
-              <form>
-                <fieldset>
-                  <fieldset class="form-group">
-                    <input
-                      class="form-control"
-                      type="text"
-                      placeholder="URL of profile picture"
-                      .value=${this.image || ""}
-                      @change=${(e) => (this.image = e.target.value)}
-                    />
-                  </fieldset>
-                  <fieldset class="form-group">
-                    <input
-                      class="form-control form-control-lg"
-                      type="text"
-                      placeholder="Username"
-                      .value=${this.username || ""}
-                      @change=${(e) => (this.username = e.target.value)}
-                    />
-                  </fieldset>
-                  <fieldset class="form-group">
-                    <textarea
-                      class="form-control form-control-lg"
-                      rows="8"
-                      placeholder="Short bio about you"
-                      .value=${this.bio || ""}
-                      @change=${(e) => (this.bio = e.target.value)}
-                    ></textarea>
-                  </fieldset>
-                  <fieldset class="form-group">
-                    <input
-                      class="form-control form-control-lg"
-                      type="text"
-                      placeholder="Email"
-                      .value=${this.email || ""}
-                      @change=${(e) => (this.email = e.target.value)}
-                    />
-                  </fieldset>
-                  <fieldset class="form-group">
-                    <input
-                      class="form-control form-control-lg"
-                      type="password"
-                      placeholder="Password"
-                      .value=${this.password || ""}
-                      @change=${(e) => (this.password = e.target.value)}
-                    />
-                  </fieldset>
-                  <button
-                    class="btn btn-lg btn-primary pull-xs-right"
-                    @click=${(e) => {
-                      e.preventDefault();
-                      this.submit();
-                    }}
-                  >
-                    Update settings
-                  </button>
-                </fieldset>
-              </form>
+              ${renderErrorMessages(this.errorMessages)}${this.renderForm()}
               <hr />
               <button
                 class="btn btn-outline-danger"
@@ -146,6 +89,72 @@ export class SettingsPage extends LitElement {
         </div>
       </div>
       <c-footer></c-footer>
+    `;
+  }
+
+  renderForm() {
+    if (this.image == null) {
+      return html`<p>Loading settings...</p>`;
+    }
+    return html`
+      <form>
+        <fieldset>
+          <fieldset class="form-group">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="URL of profile picture"
+              .value=${this.image}
+              @change=${(e) => (this.image = e.target.value)}
+            />
+          </fieldset>
+          <fieldset class="form-group">
+            <input
+              class="form-control form-control-lg"
+              type="text"
+              placeholder="Username"
+              .value=${this.username}
+              @change=${(e) => (this.username = e.target.value)}
+            />
+          </fieldset>
+          <fieldset class="form-group">
+            <textarea
+              class="form-control form-control-lg"
+              rows="8"
+              placeholder="Short bio about you"
+              .value=${this.bio}
+              @change=${(e) => (this.bio = e.target.value)}
+            ></textarea>
+          </fieldset>
+          <fieldset class="form-group">
+            <input
+              class="form-control form-control-lg"
+              type="text"
+              placeholder="Email"
+              .value=${this.email}
+              @change=${(e) => (this.email = e.target.value)}
+            />
+          </fieldset>
+          <fieldset class="form-group">
+            <input
+              class="form-control form-control-lg"
+              type="password"
+              placeholder="Password"
+              .value=${this.password}
+              @change=${(e) => (this.password = e.target.value)}
+            />
+          </fieldset>
+          <button
+            class="btn btn-lg btn-primary pull-xs-right"
+            @click=${(e) => {
+              e.preventDefault();
+              this.submit();
+            }}
+          >
+            Update settings
+          </button>
+        </fieldset>
+      </form>
     `;
   }
 }

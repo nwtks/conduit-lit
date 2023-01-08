@@ -9,7 +9,7 @@ const fetchWithHeaders = async (reqAuth, fetch) => {
   if (reqAuth) {
     const auth = getAuth();
     if (auth) {
-      headers["Authorization"] = "Token " + auth.token;
+      headers["Authorization"] = `Token ${auth.token}`;
     }
   }
 

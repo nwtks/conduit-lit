@@ -14,6 +14,13 @@ export class RegisterPage extends LitElement {
     errorMessages: { type: Array },
   };
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.username = "";
+    this.email = "";
+    this.password = "";
+  }
+
   async submit() {
     this.errorMessages = [];
     const res = await fetchPost("users", {
@@ -50,7 +57,7 @@ export class RegisterPage extends LitElement {
                     class="form-control form-control-lg"
                     type="text"
                     placeholder="Username"
-                    .value=${this.username || ""}
+                    .value=${this.username}
                     @change=${(e) => (this.username = e.target.value)}
                   />
                 </fieldset>
@@ -59,7 +66,7 @@ export class RegisterPage extends LitElement {
                     class="form-control form-control-lg"
                     type="text"
                     placeholder="Email"
-                    .value=${this.email || ""}
+                    .value=${this.email}
                     @change=${(e) => (this.email = e.target.value)}
                   />
                 </fieldset>
@@ -68,7 +75,7 @@ export class RegisterPage extends LitElement {
                     class="form-control form-control-lg"
                     type="password"
                     placeholder="Password"
-                    .value=${this.password || ""}
+                    .value=${this.password}
                     @change=${(e) => (this.password = e.target.value)}
                   />
                 </fieldset>
