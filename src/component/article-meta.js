@@ -11,7 +11,6 @@ export class ArticleMeta extends LitElement {
     article: { type: Object },
     actions: { type: Boolean },
     errorMessages: { type: Array },
-    globalStyles: { state: true },
   };
 
   connectedCallback() {

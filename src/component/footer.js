@@ -2,10 +2,6 @@ import { LitElement, html } from "../lit.js";
 import { globalStyles } from "../style.js";
 
 export class Footer extends LitElement {
-  static properties = {
-    globalStyles: { state: true },
-  };
-
   connectedCallback() {
     super.connectedCallback();
     this.globalStyles = globalStyles();

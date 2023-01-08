@@ -18,7 +18,6 @@ export class ArticlePage extends LitElement {
     comments: { type: Array },
     comment: { type: String },
     errorMessages: { type: Array },
-    globalStyles: { state: true },
   };
 
   connectedCallback() {

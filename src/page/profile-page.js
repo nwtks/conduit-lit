@@ -18,7 +18,6 @@ export class ProfilePage extends LitElement {
     article: { type: String },
     offset: { type: Number },
     errorMessages: { type: Array },
-    globalStyles: { state: true },
   };
 
   connectedCallback() {

@@ -15,7 +15,6 @@ export class EditorPage extends LitElement {
     tag: { type: String },
     tags: { type: Array },
     errorMessages: { type: Array },
-    globalStyles: { state: true },
   };
 
   connectedCallback() {

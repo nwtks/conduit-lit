@@ -6,7 +6,6 @@ export class Navbar extends LitElement {
   static properties = {
     auth: { type: Object },
     path: { type: String },
-    globalStyles: { state: true },
   };
 
   connectedCallback() {

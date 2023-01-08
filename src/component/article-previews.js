@@ -7,7 +7,6 @@ export class ArticlePreviews extends LitElement {
   static properties = {
     auth: { type: Object },
     articles: { type: Array },
-    globalStyles: { state: true },
   };
 
   connectedCallback() {

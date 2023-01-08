@@ -17,7 +17,6 @@ export class HomePage extends LitElement {
     tag: { type: String },
     offset: { type: Number },
     errorMessages: { type: Array },
-    globalStyles: { state: true },
   };
 
   connectedCallback() {

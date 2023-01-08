@@ -6,7 +6,6 @@ export class Pagination extends LitElement {
     per: { type: Number },
     offset: { type: Number },
     total: { type: Number },
-    globalStyles: { state: true },
   };
 
   connectedCallback() {

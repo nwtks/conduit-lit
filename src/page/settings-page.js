@@ -15,7 +15,6 @@ export class SettingsPage extends LitElement {
     email: { type: String },
     password: { type: String },
     errorMessages: { type: Array },
-    globalStyles: { state: true },
   };
 
   connectedCallback() {

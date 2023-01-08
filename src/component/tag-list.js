@@ -4,7 +4,6 @@ import { globalStyles } from "../style.js";
 export class TagList extends LitElement {
   static properties = {
     tags: { type: Array },
-    globalStyles: { state: true },
   };
 
   connectedCallback() {
