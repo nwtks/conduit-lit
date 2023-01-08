@@ -1,7 +1,7 @@
 import { LitElement, html, map } from "../lit.js";
 import "../component/navbar.js";
 import "../component/footer.js";
-import { importStyles } from "../style.js";
+import { globalStyles } from "../style.js";
 import { fetchGet, fetchPost, fetchPut } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
 
@@ -15,10 +15,12 @@ export class EditorPage extends LitElement {
     tag: { type: String },
     tags: { type: Array },
     errorMessages: { type: Array },
+    globalStyles: { state: true },
   };
 
   connectedCallback() {
     super.connectedCallback();
+    this.globalStyles = globalStyles();
     this.tag = "";
     if (this.slug) {
       this.fetchArticle();
@@ -96,7 +98,7 @@ export class EditorPage extends LitElement {
 
   render() {
     return html`
-      ${importStyles()}
+      ${this.globalStyles}
       <c-navbar .auth=${this.auth} path="editor"></c-navbar>
       <div class="editor-page">
         <div class="container page">

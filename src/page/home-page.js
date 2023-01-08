@@ -3,7 +3,7 @@ import "../component/navbar.js";
 import "../component/footer.js";
 import "../component/article-previews.js";
 import "../component/pagination.js";
-import { importStyles } from "../style.js";
+import { globalStyles } from "../style.js";
 import { fetchGet } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
 
@@ -17,10 +17,12 @@ export class HomePage extends LitElement {
     tag: { type: String },
     offset: { type: Number },
     errorMessages: { type: Array },
+    globalStyles: { state: true },
   };
 
   connectedCallback() {
     super.connectedCallback();
+    this.globalStyles = globalStyles();
     if (this.auth) {
       this.fetchYourFeed();
     } else {
@@ -91,7 +93,7 @@ export class HomePage extends LitElement {
 
   render() {
     return html`
-      ${importStyles()}
+      ${this.globalStyles}
       <c-navbar .auth=${this.auth} path="home"></c-navbar>
       <div class="home-page">
         <div class="banner">

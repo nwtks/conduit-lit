@@ -4,7 +4,7 @@ import "../component/navbar.js";
 import "../component/footer.js";
 import "../component/article-meta.js";
 import "../component/tag-list.js";
-import { importStyles } from "../style.js";
+import { globalStyles } from "../style.js";
 import { fetchGet, fetchPost, fetchDelete } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { formatDate } from "../format.js";
@@ -18,10 +18,12 @@ export class ArticlePage extends LitElement {
     comments: { type: Array },
     comment: { type: String },
     errorMessages: { type: Array },
+    globalStyles: { state: true },
   };
 
   connectedCallback() {
     super.connectedCallback();
+    this.globalStyles = globalStyles();
     this.comment = "";
     this.fetchArticle();
     this.fetchComments();
@@ -91,7 +93,7 @@ export class ArticlePage extends LitElement {
 
   render() {
     return html`
-      ${importStyles()}
+      ${this.globalStyles}
       <c-navbar .auth=${this.auth}></c-navbar>
       <div class="article-page">
         <div class="banner">

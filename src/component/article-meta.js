@@ -1,5 +1,5 @@
 import { LitElement, html } from "../lit.js";
-import { importStyles } from "../style.js";
+import { globalStyles } from "../style.js";
 import { fetchPost, fetchDelete } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { formatDate } from "../format.js";
@@ -11,7 +11,13 @@ export class ArticleMeta extends LitElement {
     article: { type: Object },
     actions: { type: Boolean },
     errorMessages: { type: Array },
+    globalStyles: { state: true },
   };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.globalStyles = globalStyles();
+  }
 
   async delete() {
     this.errorMessages = [];
@@ -108,7 +114,7 @@ export class ArticleMeta extends LitElement {
 
   render() {
     return html`
-      ${importStyles()}
+      ${this.globalStyles}
       <div class="article-meta">
         <a href="#/profile/${this.article.author.username}">
           <img src=${this.article.author.image || no_image} />

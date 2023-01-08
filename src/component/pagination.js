@@ -1,12 +1,18 @@
 import { LitElement, html, map, range } from "../lit.js";
-import { importStyles } from "../style.js";
+import { globalStyles } from "../style.js";
 
 export class Pagination extends LitElement {
   static properties = {
     per: { type: Number },
     offset: { type: Number },
     total: { type: Number },
+    globalStyles: { state: true },
   };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.globalStyles = globalStyles();
+  }
 
   paging(offset) {
     this.dispatchEvent(
@@ -21,7 +27,7 @@ export class Pagination extends LitElement {
 
   render() {
     return html`
-      ${importStyles()}
+      ${this.globalStyles}
       <nav>
         <ul class="pagination">
           ${map(

@@ -1,7 +1,7 @@
 import { LitElement, html } from "../lit.js";
 import "../component/navbar.js";
 import "../component/footer.js";
-import { importStyles } from "../style.js";
+import { globalStyles } from "../style.js";
 import { fetchGet, fetchPut } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { setAuth, clearAuth } from "../auth.js";
@@ -15,10 +15,12 @@ export class SettingsPage extends LitElement {
     email: { type: String },
     password: { type: String },
     errorMessages: { type: Array },
+    globalStyles: { state: true },
   };
 
   connectedCallback() {
     super.connectedCallback();
+    this.globalStyles = globalStyles();
     this.password = "";
     this.fetchSettings();
   }
@@ -66,7 +68,7 @@ export class SettingsPage extends LitElement {
 
   render() {
     return html`
-      ${importStyles()}
+      ${this.globalStyles}
       <c-navbar .auth=${this.auth} path="settings"></c-navbar>
       <div class="settings-page">
         <div class="container page">

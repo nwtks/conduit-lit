@@ -1,14 +1,20 @@
 import { LitElement, html, map } from "../lit.js";
-import { importStyles } from "../style.js";
+import { globalStyles } from "../style.js";
 
 export class TagList extends LitElement {
   static properties = {
     tags: { type: Array },
+    globalStyles: { state: true },
   };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.globalStyles = globalStyles();
+  }
 
   render() {
     return html`
-      ${importStyles()}
+      ${this.globalStyles}
       <ul class="tag-list">
         ${map(
           this.tags,

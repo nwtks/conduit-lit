@@ -1,12 +1,18 @@
 import { LitElement, html, when } from "../lit.js";
-import { importStyles } from "../style.js";
+import { globalStyles } from "../style.js";
 import { no_image } from "../config.js";
 
 export class Navbar extends LitElement {
   static properties = {
     auth: { type: Object },
     path: { type: String },
+    globalStyles: { state: true },
   };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.globalStyles = globalStyles();
+  }
 
   renderActive(path) {
     return this.path === path ? "active" : "";
@@ -14,7 +20,7 @@ export class Navbar extends LitElement {
 
   render() {
     return html`
-      ${importStyles()}
+      ${this.globalStyles}
       <nav class="navbar navbar-light">
         <div class="container">
           <a class="navbar-brand" href="#/">conduit</a>

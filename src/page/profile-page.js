@@ -3,7 +3,7 @@ import "../component/navbar.js";
 import "../component/footer.js";
 import "../component/article-previews.js";
 import "../component/pagination.js";
-import { importStyles } from "../style.js";
+import { globalStyles } from "../style.js";
 import { fetchGet, fetchPost, fetchDelete } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
 import { no_image } from "../config.js";
@@ -18,10 +18,12 @@ export class ProfilePage extends LitElement {
     article: { type: String },
     offset: { type: Number },
     errorMessages: { type: Array },
+    globalStyles: { state: true },
   };
 
   connectedCallback() {
     super.connectedCallback();
+    this.globalStyles = globalStyles();
     this.fetchProfile();
     this.fetchMyArticles();
   }
@@ -112,7 +114,7 @@ export class ProfilePage extends LitElement {
 
   render() {
     return html`
-      ${importStyles()}
+      ${this.globalStyles}
       <c-navbar .auth=${this.auth} path="profile"></c-navbar>
       <div class="profile-page">
         <div class="user-info">

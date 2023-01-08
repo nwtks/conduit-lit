@@ -1,10 +1,19 @@
 import { LitElement, html } from "../lit.js";
-import { importStyles } from "../style.js";
+import { globalStyles } from "../style.js";
 
 export class Footer extends LitElement {
+  static properties = {
+    globalStyles: { state: true },
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.globalStyles = globalStyles();
+  }
+
   render() {
     return html`
-      ${importStyles()}
+      ${this.globalStyles}
       <footer>
         <div class="container">
           <a href="#/" class="logo-font">conduit</a>

@@ -1,29 +1,35 @@
 import { LitElement, html, map } from "../lit.js";
 import "./article-meta.js";
 import "./tag-list.js";
-import { importStyles } from "../style.js";
+import { globalStyles } from "../style.js";
 
 export class ArticlePreviews extends LitElement {
   static properties = {
     auth: { type: Object },
     articles: { type: Array },
+    globalStyles: { state: true },
   };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.globalStyles = globalStyles();
+  }
 
   render() {
     if (!this.articles) {
       return html`
-        ${importStyles()}
+        ${this.globalStyles}
         <div class="article-preview">Loading articles...</div>
       `;
     }
     if (!this.articles.length) {
       return html`
-        ${importStyles()}
+        ${this.globalStyles}
         <div class="article-preview">No articles are here... yet.</div>
       `;
     }
     return html`
-      ${importStyles()}
+      ${this.globalStyles}
       ${map(
         this.articles,
         (item) => html`
