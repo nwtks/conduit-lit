@@ -14,9 +14,10 @@ export class RegisterPage extends LitElement {
     errorMessages: { type: Array },
   };
 
+  globalStyles = globalStyles();
+
   connectedCallback() {
     super.connectedCallback();
-    this.globalStyles = globalStyles();
     this.username = "";
     this.email = "";
     this.password = "";

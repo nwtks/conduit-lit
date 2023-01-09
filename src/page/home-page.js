@@ -1,4 +1,4 @@
-import { LitElement, html, map, when } from "../lit.js";
+import { LitElement, html, classMap, when, map } from "../lit.js";
 import "../component/navbar.js";
 import "../component/footer.js";
 import "../component/article-previews.js";
@@ -19,9 +19,10 @@ export class HomePage extends LitElement {
     errorMessages: { type: Array },
   };
 
+  globalStyles = globalStyles();
+
   connectedCallback() {
     super.connectedCallback();
-    this.globalStyles = globalStyles();
     if (this.auth) {
       this.fetchYourFeed();
     } else {
@@ -87,7 +88,7 @@ export class HomePage extends LitElement {
   }
 
   renderActive(feed) {
-    return this.feed === feed ? "active" : "";
+    return classMap({ "nav-link": true, active: this.feed === feed });
   }
 
   render() {
@@ -112,7 +113,7 @@ export class HomePage extends LitElement {
                     () => html`
                       <li class="nav-item">
                         <a
-                          class="nav-link ${this.renderActive("your")}"
+                          class=${this.renderActive("your")}
                           href=""
                           @click=${(e) => {
                             e.preventDefault();
@@ -126,7 +127,7 @@ export class HomePage extends LitElement {
                   )}
                   <li class="nav-item">
                     <a
-                      class="nav-link ${this.renderActive("global")}"
+                      class=${this.renderActive("global")}
                       href=""
                       @click=${(e) => {
                         e.preventDefault();

@@ -17,9 +17,10 @@ export class EditorPage extends LitElement {
     errorMessages: { type: Array },
   };
 
+  globalStyles = globalStyles();
+
   connectedCallback() {
     super.connectedCallback();
-    this.globalStyles = globalStyles();
     this.tag = "";
     if (this.slug) {
       this.fetchArticle();

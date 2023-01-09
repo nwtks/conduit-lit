@@ -17,9 +17,10 @@ export class SettingsPage extends LitElement {
     errorMessages: { type: Array },
   };
 
+  globalStyles = globalStyles();
+
   connectedCallback() {
     super.connectedCallback();
-    this.globalStyles = globalStyles();
     this.password = "";
     this.fetchSettings();
   }

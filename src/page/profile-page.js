@@ -1,4 +1,4 @@
-import { LitElement, html } from "../lit.js";
+import { LitElement, html, classMap } from "../lit.js";
 import "../component/navbar.js";
 import "../component/footer.js";
 import "../component/article-previews.js";
@@ -20,9 +20,10 @@ export class ProfilePage extends LitElement {
     errorMessages: { type: Array },
   };
 
+  globalStyles = globalStyles();
+
   connectedCallback() {
     super.connectedCallback();
-    this.globalStyles = globalStyles();
     this.fetchProfile();
     this.fetchMyArticles();
   }
@@ -108,7 +109,7 @@ export class ProfilePage extends LitElement {
   }
 
   renderActive(article) {
-    return this.article === article ? "active" : "";
+    return classMap({ "nav-link": true, active: this.article === article });
   }
 
   render() {
@@ -127,7 +128,7 @@ export class ProfilePage extends LitElement {
                 <ul class="nav nav-pills outline-active">
                   <li class="nav-item">
                     <a
-                      class="nav-link ${this.renderActive("author")}"
+                      class=${this.renderActive("author")}
                       href=""
                       @click=${(e) => {
                         e.preventDefault();
@@ -139,7 +140,7 @@ export class ProfilePage extends LitElement {
                   </li>
                   <li class="nav-item">
                     <a
-                      class="nav-link ${this.renderActive("favorited")}"
+                      class=${this.renderActive("favorited")}
                       href=""
                       @click=${(e) => {
                         e.preventDefault();

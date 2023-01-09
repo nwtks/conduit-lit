@@ -1,4 +1,4 @@
-import { LitElement, html } from "../lit.js";
+import { LitElement, html, classMap } from "../lit.js";
 import { globalStyles } from "../style.js";
 import { fetchPost, fetchDelete } from "../fetch.js";
 import { addErrorMessages, renderErrorMessages } from "../error.js";
@@ -13,10 +13,7 @@ export class ArticleMeta extends LitElement {
     errorMessages: { type: Array },
   };
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.globalStyles = globalStyles();
-  }
+  globalStyles = globalStyles();
 
   async delete() {
     this.errorMessages = [];
@@ -168,9 +165,7 @@ export class ArticleMeta extends LitElement {
         </button>
         &#160;&#160;
         <button
-          class="btn btn-sm ${this.article.favorited
-            ? "btn-primary"
-            : "btn-outline-primary"}"
+          class=${this.renderFavoritedButton()}
           @click=${(e) => {
             e.preventDefault();
             this.toggleFavorite();
@@ -187,9 +182,7 @@ export class ArticleMeta extends LitElement {
     }
     return html`
       <button
-        class="btn btn-sm pull-xs-right ${this.article.favorited
-          ? "btn-primary"
-          : "btn-outline-primary"}"
+        class="pull-xs-right ${this.renderFavoritedButton()}"
         @click=${(e) => {
           e.preventDefault();
           this.toggleFavorite();
@@ -200,6 +193,15 @@ export class ArticleMeta extends LitElement {
         >
       </button>
     `;
+  }
+
+  renderFavoritedButton() {
+    return classMap({
+      btn: true,
+      "btn-sm": true,
+      "btn-primary": this.article.favorited,
+      "btn-outline-primary": !this.article.favorited,
+    });
   }
 }
 

@@ -13,9 +13,10 @@ export class LoginPage extends LitElement {
     errorMessages: { type: Array },
   };
 
+  globalStyles = globalStyles();
+
   connectedCallback() {
     super.connectedCallback();
-    this.globalStyles = globalStyles();
     this.email = "";
     this.password = "";
   }

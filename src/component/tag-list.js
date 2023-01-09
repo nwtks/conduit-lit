@@ -6,10 +6,7 @@ export class TagList extends LitElement {
     tags: { type: Array },
   };
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.globalStyles = globalStyles();
-  }
+  globalStyles = globalStyles();
 
   render() {
     return html`

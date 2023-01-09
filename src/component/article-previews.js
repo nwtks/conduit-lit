@@ -9,10 +9,7 @@ export class ArticlePreviews extends LitElement {
     articles: { type: Array },
   };
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.globalStyles = globalStyles();
-  }
+  globalStyles = globalStyles();
 
   render() {
     if (!this.articles) {

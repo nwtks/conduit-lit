@@ -1,4 +1,4 @@
-import { LitElement, html, map, range } from "../lit.js";
+import { LitElement, html, classMap, map, range } from "../lit.js";
 import { globalStyles } from "../style.js";
 
 export class Pagination extends LitElement {
@@ -8,10 +8,7 @@ export class Pagination extends LitElement {
     total: { type: Number },
   };
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.globalStyles = globalStyles();
-  }
+  globalStyles = globalStyles();
 
   paging(offset) {
     this.dispatchEvent(
@@ -24,6 +21,10 @@ export class Pagination extends LitElement {
     );
   }
 
+  renderActive(offset) {
+    return classMap({ "page-item": true, active: this.offset === offset });
+  }
+
   render() {
     return html`
       ${this.globalStyles}
@@ -32,7 +33,7 @@ export class Pagination extends LitElement {
           ${map(
             range(this.total / this.per),
             (i) => html`
-              <li class="page-item ${this.offset === i ? "active" : ""}">
+              <li class=${this.renderActive(i)}>
                 <a
                   class="page-link"
                   href=""

@@ -1,4 +1,4 @@
-import { LitElement, html, map, when, unsafeHTML } from "../lit.js";
+import { LitElement, html, when, map, unsafeHTML } from "../lit.js";
 import { marked } from "../marked.js";
 import "../component/navbar.js";
 import "../component/footer.js";
@@ -20,9 +20,10 @@ export class ArticlePage extends LitElement {
     errorMessages: { type: Array },
   };
 
+  globalStyles = globalStyles();
+
   connectedCallback() {
     super.connectedCallback();
-    this.globalStyles = globalStyles();
     this.comment = "";
     this.fetchArticle();
     this.fetchComments();
@@ -212,15 +213,16 @@ export class ArticlePage extends LitElement {
             ${when(
               this.auth && this.auth.username === item.author.username,
               () => html`
-                <span class="mod-options">
-                  <i
-                    class="ion-trash-a"
-                    @click=${(e) => {
-                      e.preventDefault();
-                      this.deleteComment(item.id);
-                    }}
-                  ></i>
-                </span>
+                <a
+                  class="mod-options"
+                  href=""
+                  @click=${(e) => {
+                    e.preventDefault();
+                    this.deleteComment(item.id);
+                  }}
+                >
+                  <i class="ion-trash-a"></i>
+                </a>
               `
             )}
           </div>
