@@ -8,11 +8,11 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite",
-    "build": "vite build"
+    "build": "rollup --config"
   },
   "devDependencies": {
-    "rollup-plugin-minify-html-literals": "^1.2.6",
-    "vite": "^4.0.0"
+    "@rollup/plugin-terser": "^0.4.0",
+    "rollup": "^2.79.0",
+    "rollup-plugin-minify-html-literals": "^1.2.6"
   }
 }

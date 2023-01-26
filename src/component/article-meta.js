@@ -100,7 +100,7 @@ export class ArticleMeta extends LitElement {
   dispatchArticleChange() {
     this.dispatchEvent(
       new CustomEvent("article-change", {
-        detail: { article: Object.assign({}, this.article) },
+        detail: { article: { ...this.article } },
         bubbles: true,
         composed: true,
         cancelable: true,
